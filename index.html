@@ -4,379 +4,233 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Jejum Tracker</title>
-
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-title" content="Jejum">
 <meta name="theme-color" content="#1a1a1a">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <script>
-(function() {
-  // Ícone: prato vazio (círculo com elipse)
-  const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-    <rect width="512" height="512" rx="110" fill="#1e1e1e"/>
-    <ellipse cx="256" cy="272" rx="148" ry="22" fill="none" stroke="#a8d5a2" stroke-width="18"/>
-    <ellipse cx="256" cy="272" rx="96" ry="13" fill="none" stroke="#a8d5a2" stroke-width="10" opacity="0.4"/>
-    <line x1="256" y1="130" x2="256" y2="250" stroke="#a8d5a2" stroke-width="18" stroke-linecap="round"/>
-    <line x1="210" y1="148" x2="210" y2="220" stroke="#a8d5a2" stroke-width="12" stroke-linecap="round"/>
-    <line x1="302" y1="148" x2="302" y2="220" stroke="#a8d5a2" stroke-width="12" stroke-linecap="round"/>
+(function(){
+  const ico=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="110" fill="#1a1a1a"/>
+    <ellipse cx="256" cy="300" rx="155" ry="24" fill="none" stroke="#a8d5a2" stroke-width="20"/>
+    <ellipse cx="256" cy="300" rx="100" ry="14" fill="none" stroke="#a8d5a2" stroke-width="11" opacity="0.4"/>
+    <line x1="256" y1="130" x2="256" y2="276" stroke="#a8d5a2" stroke-width="20" stroke-linecap="round"/>
+    <line x1="200" y1="155" x2="200" y2="240" stroke="#a8d5a2" stroke-width="13" stroke-linecap="round"/>
+    <line x1="312" y1="155" x2="312" y2="240" stroke="#a8d5a2" stroke-width="13" stroke-linecap="round"/>
   </svg>`;
-  const iconUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgIcon);
-
-  const splashSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-    <rect width="512" height="512" fill="#1a1a1a"/>
-    <ellipse cx="256" cy="290" rx="160" ry="24" fill="none" stroke="#a8d5a2" stroke-width="20"/>
-    <ellipse cx="256" cy="290" rx="104" ry="14" fill="none" stroke="#a8d5a2" stroke-width="11" opacity="0.4"/>
-    <line x1="256" y1="130" x2="256" y2="266" stroke="#a8d5a2" stroke-width="20" stroke-linecap="round"/>
-    <line x1="204" y1="152" x2="204" y2="234" stroke="#a8d5a2" stroke-width="13" stroke-linecap="round"/>
-    <line x1="308" y1="152" x2="308" y2="234" stroke="#a8d5a2" stroke-width="13" stroke-linecap="round"/>
-  </svg>`;
-  const splashUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(splashSvg);
-
-  const manifest = {
-    name: "Jejum Tracker",
-    short_name: "Jejum",
-    display: "fullscreen",
-    orientation: "portrait",
-    start_url: "./index.html",
-    scope: "./",
-    background_color: "#1a1a1a",
-    theme_color: "#1a1a1a",
-    icons: [{ src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }]
-  };
-
-  const mUrl = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
-  const lm = document.createElement('link'); lm.rel = 'manifest'; lm.href = mUrl;
-  document.head.appendChild(lm);
-  const li = document.createElement('link'); li.rel = 'apple-touch-icon'; li.href = iconUrl;
-  document.head.appendChild(li);
-  const ls = document.createElement('link'); ls.rel = 'apple-touch-startup-image'; ls.href = splashUrl;
-  document.head.appendChild(ls);
+  const iUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(ico);
+  const mf={name:"Jejum Tracker",short_name:"Jejum",display:"fullscreen",orientation:"portrait",start_url:"./index.html",scope:"./",background_color:"#1a1a1a",theme_color:"#1a1a1a",icons:[{src:iUrl,sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"}]};
+  const ml=document.createElement('link');ml.rel='manifest';ml.href='data:application/manifest+json;charset=utf-8,'+encodeURIComponent(JSON.stringify(mf));document.head.appendChild(ml);
+  const il=document.createElement('link');il.rel='apple-touch-icon';il.href=iUrl;document.head.appendChild(il);
 })();
 </script>
-
 <style>
-:root {
-  --bg:        #1a1a1a;
-  --surface:   #232323;
-  --surface2:  #2a2a2a;
-  --border:    #333333;
-  --green:     #a8d5a2;
-  --green-dim: #6aad6233;
-  --green-glow:#a8d5a255;
-  --text:      #e8e8e8;
-  --text-2:    #999999;
-  --text-3:    #666666;
-  --red:       #e07070;
-  --r:         20px;
+:root{
+  --bg:#1a1a1a; --s1:#232323; --s2:#2a2a2a; --bd:#333;
+  --grn:#a8d5a2; --grn-d:#a8d5a218; --grn-m:#a8d5a240; --grn-g:#a8d5a255;
+  --tx:#e8e8e8; --t2:#999; --t3:#555;
+  --red:#e07070;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body,html{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:hidden;position:fixed;top:0;left:0;font-family:'Barlow',sans-serif;}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:999;transition:opacity 0.7s ease;}
+#splash.hide{opacity:0;pointer-events:none;}
+#splash svg{width:88px;height:88px;animation:fi 0.9s ease forwards;opacity:0;}
+#splash .sn{font-family:'Lilita One',cursive;font-size:1.6rem;letter-spacing:4px;color:var(--grn);animation:fi 0.9s 0.2s ease forwards;opacity:0;}
+@keyframes fi{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+/* LAYOUT */
+.app{display:flex;flex-direction:column;width:100vw;height:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+
+/* HEADER */
+.hdr{padding:16px 18px 13px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid var(--bd);}
+.hdr-left{display:flex;align-items:center;gap:9px;}
+.hdr-left svg{width:28px;height:28px;}
+.hdr-name{font-family:'Lilita One',cursive;font-size:1.15rem;letter-spacing:1px;color:var(--grn);}
+.hdr-date{font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:2px;color:var(--t3);text-transform:uppercase;}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:14px 14px 24px;display:flex;flex-direction:column;gap:13px;}
+
+/* CARDS */
+.card{background:var(--s1);border-radius:20px;padding:18px;border:1px solid var(--bd);display:flex;flex-direction:column;gap:13px;}
+.sec{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--t3);}
+
+/* CONFIG */
+.dur-row{display:flex;align-items:center;gap:10px;}
+.dur-input{
+  flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:12px;
+  color:var(--tx);font-family:'Lilita One',cursive;font-size:2.2rem;
+  padding:10px 14px;outline:none;text-align:center;
+  -webkit-appearance:none;appearance:none;transition:border-color 0.2s;
+}
+.dur-input:focus{border-color:var(--grn);}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.dur-unit{font-family:'Barlow Condensed',sans-serif;font-size:0.9rem;color:var(--t3);white-space:nowrap;letter-spacing:1px;}
+
+.presets{display:flex;gap:7px;flex-wrap:wrap;}
+.pre-btn{
+  background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:6px 13px;
+  font-family:'Barlow Condensed',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:1px;
+  color:var(--t2);cursor:pointer;transition:all 0.15s;
+}
+.pre-btn.active{background:var(--grn-d);border-color:var(--grn);color:var(--grn);}
+
+.btn-start{
+  width:100%;padding:16px;background:var(--grn);color:#111;border:none;border-radius:14px;
+  font-family:'Lilita One',cursive;font-size:1.1rem;letter-spacing:1px;cursor:pointer;transition:opacity 0.15s;
+}
+.btn-start:active{opacity:0.8;}
+
+/* CÍRCULO — FIX: tamanho responsivo via vw */
+.circle-card{
+  background:var(--s1);border-radius:20px;padding:22px 16px 18px;
+  border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;gap:16px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+/* O wrap usa vw para garantir que cabe na tela */
+.circle-wrap{
+  position:relative;
+  width:min(72vw, 280px);
+  height:min(72vw, 280px);
+}
+.circle-svg{
+  width:100%;height:100%;
+  transform:rotate(-90deg);
+  overflow:visible;
+}
+.circle-track{fill:none;stroke:var(--s2);stroke-width:10;}
+.circle-prog{
+  fill:none;stroke:var(--grn);stroke-width:10;stroke-linecap:round;
+  stroke-dasharray:628;stroke-dashoffset:628;
+  transition:stroke-dashoffset 1s linear,stroke 0.5s ease;
+  filter:drop-shadow(0 0 10px var(--grn-g));
+}
+.circle-prog.over{stroke:var(--red);filter:drop-shadow(0 0 8px #e0707066);}
 
-body, html {
-  width: 100%; height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  overflow: hidden;
-  position: fixed;
-  top: 0; left: 0;
-  font-family: 'DM Sans', sans-serif;
+/* Centro do círculo — fonte menor para caber dentro */
+.circle-center{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:0 10%;/* garante margem interna do traço */
 }
+.circle-time{
+  font-family:'Lilita One',cursive;
+  /* Fonte fluida: grande em telas grandes, menor em pequenas */
+  font-size:clamp(1.6rem, 9vw, 2.4rem);
+  color:var(--tx);line-height:1;white-space:nowrap;
+}
+.circle-sub{font-family:'Barlow Condensed',sans-serif;font-size:clamp(0.55rem,2.5vw,0.72rem);letter-spacing:3px;text-transform:uppercase;color:var(--t3);}
+.circle-pct{font-family:'Lilita One',cursive;font-size:clamp(0.85rem,3.5vw,1rem);color:var(--grn);}
 
-/* ── SPLASH ── */
-#splash {
-  position: fixed; inset: 0; background: var(--bg);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
-  z-index: 999; transition: opacity 0.6s ease;
-}
-#splash.hide { opacity: 0; pointer-events: none; }
-#splash .plate-icon { width: 90px; height: 90px; animation: floatIn 0.8s ease forwards; opacity: 0; }
-#splash .app-name {
-  font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 1.1rem;
-  letter-spacing: 8px; text-transform: uppercase; color: var(--green);
-  animation: floatIn 0.8s 0.2s ease forwards; opacity: 0;
-}
-@keyframes floatIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+/* Stats abaixo do círculo */
+.circle-stats{display:flex;gap:24px;justify-content:center;}
+.stat-item{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.stat-val{font-family:'Lilita One',cursive;font-size:1rem;color:var(--tx);}
+.stat-lbl{font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--t3);}
 
-/* ── LAYOUT ── */
-.app {
-  display: flex; flex-direction: column;
-  width: 100vw; height: 100%;
-  overflow: hidden;
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+.btn-stop{
+  width:100%;padding:14px;background:transparent;color:var(--red);
+  border:1px solid #4a1515;border-radius:14px;
+  font-family:'Lilita One',cursive;font-size:1rem;letter-spacing:1px;cursor:pointer;transition:background 0.15s;
 }
+.btn-stop:active{background:#1a0505;}
 
-/* ── HEADER ── */
-.header {
-  padding: 18px 20px 14px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-shrink: 0;
-}
-.header-left { display: flex; align-items: center; gap: 10px; }
-.plate-sm { width: 32px; height: 32px; }
-.header-name {
-  font-weight: 500; font-size: 1rem; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--green);
-}
-.header-date { font-size: 0.75rem; color: var(--text-3); font-family: 'DM Mono', monospace; }
+/* MURAL */
+.mural-list{display:flex;flex-direction:column;}
+.mural-item{display:flex;align-items:flex-start;gap:13px;padding:13px 0;border-bottom:1px solid var(--s2);}
+.mural-item:last-child{border-bottom:none;padding-bottom:0;}
+.mural-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;padding-top:3px;}
+.mural-dot{width:10px;height:10px;border-radius:50%;background:var(--bd);flex-shrink:0;transition:background 0.4s,box-shadow 0.4s;}
+.mural-item.reached .mural-dot{background:var(--grn);box-shadow:0 0 8px var(--grn-g);}
+.mural-item.active-now .mural-dot{background:var(--grn);box-shadow:0 0 14px var(--grn);animation:dp 1.5s ease-in-out infinite;}
+@keyframes dp{0%,100%{box-shadow:0 0 6px var(--grn-g);}50%{box-shadow:0 0 20px var(--grn);}}
+.mural-line{width:1px;flex:1;min-height:18px;background:var(--bd);margin-top:4px;}
+.mural-item.reached .mural-line{background:var(--grn);opacity:0.25;}
+.mural-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+.mural-ts{font-family:'Barlow Condensed',sans-serif;font-size:0.68rem;letter-spacing:1px;color:var(--t3);}
+.mural-item.reached .mural-ts{color:var(--grn);}
+.mural-ev{font-family:'Lilita One',cursive;font-size:0.92rem;color:var(--t2);line-height:1.2;}
+.mural-item.reached .mural-ev{color:var(--tx);}
+.mural-item.active-now .mural-ev{color:var(--tx);}
+.mural-desc{font-size:0.76rem;color:var(--t3);line-height:1.5;}
+.mural-item.reached .mural-desc{color:var(--t2);}
+.mural-item.active-now .mural-desc{color:var(--t2);}
 
-/* ── SCROLL ── */
-.scroll {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  padding: 0 16px 24px;
-  display: flex; flex-direction: column; gap: 14px;
-}
+/* Banner instalar */
+#ib{display:none;background:#0c1f10;border:1px solid var(--grn);border-radius:13px;padding:9px 13px;align-items:center;gap:9px;font-size:0.78rem;color:var(--t2);}
+#ib.show{display:flex;}
+#ib span{flex:1;line-height:1.4;}
+#ib strong{color:var(--grn);}
+.ib-y{background:var(--grn);color:#000;font-family:'Lilita One',cursive;font-size:0.78rem;border:none;border-radius:7px;padding:7px 11px;cursor:pointer;white-space:nowrap;}
+.ib-n{background:transparent;color:var(--t3);border:none;font-size:1rem;cursor:pointer;padding:3px;}
 
-/* ── CONFIGURAÇÃO ── */
-.config-card {
-  background: var(--surface); border-radius: var(--r);
-  padding: 18px; border: 1px solid var(--border);
-  display: flex; flex-direction: column; gap: 14px;
-}
-.config-label {
-  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px;
-  color: var(--text-3); font-weight: 500;
-}
-.duration-row { display: flex; align-items: center; gap: 10px; }
-.duration-input {
-  flex: 1; background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 12px; color: var(--text); font-family: 'DM Mono', monospace;
-  font-size: 2rem; font-weight: 500; padding: 10px 16px;
-  outline: none; text-align: center; -webkit-appearance: none; appearance: none;
-  transition: border-color 0.2s;
-}
-.duration-input:focus { border-color: var(--green); }
-input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
-.duration-unit { font-size: 0.85rem; color: var(--text-3); white-space: nowrap; }
-
-.presets { display: flex; gap: 8px; flex-wrap: wrap; }
-.preset-btn {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 10px; padding: 6px 14px;
-  font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500;
-  color: var(--text-2); cursor: pointer; transition: all 0.15s;
-}
-.preset-btn.active, .preset-btn:active {
-  background: var(--green-dim); border-color: var(--green); color: var(--green);
-}
-
-.start-btn {
-  width: 100%; padding: 15px;
-  background: var(--green); color: #111;
-  border: none; border-radius: 14px;
-  font-family: 'DM Sans', sans-serif; font-weight: 600;
-  font-size: 1rem; letter-spacing: 1px; cursor: pointer;
-  transition: opacity 0.15s;
-}
-.start-btn:active { opacity: 0.8; }
-
-/* ── CÍRCULO ── */
-.circle-card {
-  background: var(--surface); border-radius: var(--r);
-  padding: 24px 18px 20px; border: 1px solid var(--border);
-  display: flex; flex-direction: column; align-items: center; gap: 18px;
-}
-
-.circle-wrap { position: relative; width: 220px; height: 220px; }
-
-.circle-svg { width: 220px; height: 220px; transform: rotate(-90deg); }
-
-.circle-track { fill: none; stroke: var(--surface2); stroke-width: 12; }
-
-.circle-prog {
-  fill: none; stroke: var(--green); stroke-width: 12;
-  stroke-linecap: round;
-  stroke-dasharray: 628;
-  stroke-dashoffset: 628;
-  transition: stroke-dashoffset 1s linear, stroke 0.5s ease;
-  filter: drop-shadow(0 0 8px var(--green-glow));
-}
-
-.circle-prog.over { stroke: var(--red); filter: drop-shadow(0 0 8px #e0707077); }
-
-.circle-center {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 4px;
-}
-.circle-time {
-  font-family: 'DM Mono', monospace; font-size: 2.6rem; font-weight: 500;
-  color: var(--text); line-height: 1;
-}
-.circle-sub { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-3); }
-.circle-pct { font-size: 0.85rem; color: var(--green); font-family: 'DM Mono', monospace; font-weight: 500; }
-
-.circle-stats {
-  display: flex; gap: 28px;
-}
-.stat-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-.stat-val { font-family: 'DM Mono', monospace; font-size: 1rem; font-weight: 500; color: var(--text); }
-.stat-lbl { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); }
-
-.stop-btn {
-  width: 100%; padding: 14px;
-  background: transparent; color: var(--red);
-  border: 1px solid #4a2020; border-radius: 14px;
-  font-family: 'DM Sans', sans-serif; font-weight: 600;
-  font-size: 0.9rem; letter-spacing: 1px; cursor: pointer;
-  transition: background 0.15s;
-}
-.stop-btn:active { background: #2a0808; }
-
-/* ── MURAL ── */
-.mural-card {
-  background: var(--surface); border-radius: var(--r);
-  border: 1px solid var(--border); overflow: hidden;
-}
-.mural-header {
-  padding: 14px 18px;
-  display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-.mural-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: var(--text-3); font-weight: 500; }
-
-.mural-list { display: flex; flex-direction: column; }
-
-.mural-item {
-  display: flex; align-items: flex-start; gap: 14px;
-  padding: 14px 18px;
-  border-bottom: 1px solid #2a2a2a;
-  transition: background 0.3s ease;
-  position: relative;
-}
-.mural-item:last-child { border-bottom: none; }
-
-.mural-item.reached { background: #a8d5a208; }
-.mural-item.active-event { background: #a8d5a215; }
-
-.mural-dot-wrap {
-  display: flex; flex-direction: column; align-items: center;
-  flex-shrink: 0; padding-top: 3px;
-}
-.mural-dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--border); flex-shrink: 0;
-  transition: background 0.4s ease, box-shadow 0.4s ease;
-}
-.mural-item.reached .mural-dot { background: var(--green); box-shadow: 0 0 8px var(--green-glow); }
-.mural-item.active-event .mural-dot {
-  background: var(--green);
-  box-shadow: 0 0 12px var(--green);
-  animation: dotPulse 1.5s ease-in-out infinite;
-}
-@keyframes dotPulse {
-  0%,100% { box-shadow: 0 0 6px var(--green-glow); }
-  50%      { box-shadow: 0 0 18px var(--green); }
-}
-
-.mural-line {
-  width: 1px; flex: 1; min-height: 20px;
-  background: var(--border); margin-top: 4px;
-}
-.mural-item.reached .mural-line { background: var(--green); opacity: 0.3; }
-
-.mural-body { flex: 1; display: flex; flex-direction: column; gap: 3px; }
-.mural-time { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--green); font-weight: 500; }
-.mural-item:not(.reached) .mural-time { color: var(--text-3); }
-.mural-event { font-size: 0.88rem; font-weight: 500; color: var(--text); }
-.mural-item:not(.reached) .mural-event { color: var(--text-2); }
-.mural-desc { font-size: 0.78rem; color: var(--text-3); line-height: 1.5; }
-.mural-item.active-event .mural-desc { color: var(--text-2); }
-
-/* PAINEL DE INSTALAR */
-#install-banner {
-  display: none; margin: 0 0 4px 0;
-  background: #0d1f10; border: 1px solid var(--green);
-  border-radius: 14px; padding: 10px 14px;
-  align-items: center; gap: 10px; font-size: 0.82rem; color: var(--text-2);
-}
-#install-banner.visible { display: flex; }
-#install-banner span { flex: 1; line-height: 1.4; }
-#install-banner strong { color: var(--green); }
-.ibtn-yes {
-  background: var(--green); color: #000;
-  font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.78rem;
-  border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; white-space: nowrap;
-}
-.ibtn-no { background: transparent; color: var(--text-3); border: none; font-size: 1.1rem; cursor: pointer; padding: 4px; }
-
-/* hidden / show helpers */
-.hidden { display: none !important; }
+.hidden{display:none!important;}
 </style>
 </head>
 <body>
 
 <!-- SPLASH -->
 <div id="splash">
-  <svg class="plate-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="50" cy="62" rx="38" ry="7" fill="none" stroke="#a8d5a2" stroke-width="4.5"/>
-    <ellipse cx="50" cy="62" rx="24" ry="4" fill="none" stroke="#a8d5a2" stroke-width="2.5" opacity="0.4"/>
-    <line x1="50" y1="22" x2="50" y2="55" stroke="#a8d5a2" stroke-width="4.5" stroke-linecap="round"/>
-    <line x1="36" y1="27" x2="36" y2="50" stroke="#a8d5a2" stroke-width="3" stroke-linecap="round"/>
-    <line x1="64" y1="27" x2="64" y2="50" stroke="#a8d5a2" stroke-width="3" stroke-linecap="round"/>
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="50" cy="64" rx="38" ry="7" fill="none" stroke="#a8d5a2" stroke-width="4.5"/>
+    <ellipse cx="50" cy="64" rx="24" ry="4" fill="none" stroke="#a8d5a2" stroke-width="2.5" opacity="0.4"/>
+    <line x1="50" y1="22" x2="50" y2="57" stroke="#a8d5a2" stroke-width="4.5" stroke-linecap="round"/>
+    <line x1="36" y1="28" x2="36" y2="52" stroke="#a8d5a2" stroke-width="3" stroke-linecap="round"/>
+    <line x1="64" y1="28" x2="64" y2="52" stroke="#a8d5a2" stroke-width="3" stroke-linecap="round"/>
   </svg>
-  <div class="app-name">Jejum</div>
+  <div class="sn">JEJUM</div>
 </div>
 
 <div class="app" id="main-app">
 
-  <div class="header">
-    <div class="header-left">
-      <svg class="plate-sm" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="50" cy="62" rx="38" ry="7" fill="none" stroke="#a8d5a2" stroke-width="4.5"/>
-        <ellipse cx="50" cy="62" rx="24" ry="4" fill="none" stroke="#a8d5a2" stroke-width="2.5" opacity="0.4"/>
-        <line x1="50" y1="22" x2="50" y2="55" stroke="#a8d5a2" stroke-width="4.5" stroke-linecap="round"/>
-        <line x1="36" y1="27" x2="36" y2="50" stroke="#a8d5a2" stroke-width="3" stroke-linecap="round"/>
-        <line x1="64" y1="27" x2="64" y2="50" stroke="#a8d5a2" stroke-width="3" stroke-linecap="round"/>
+  <div class="hdr">
+    <div class="hdr-left">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="64" rx="38" ry="7" fill="none" stroke="#a8d5a2" stroke-width="4.5"/>
+        <ellipse cx="50" cy="64" rx="24" ry="4" fill="none" stroke="#a8d5a2" stroke-width="2.5" opacity="0.4"/>
+        <line x1="50" y1="22" x2="50" y2="57" stroke="#a8d5a2" stroke-width="4.5" stroke-linecap="round"/>
+        <line x1="36" y1="28" x2="36" y2="52" stroke="#a8d5a2" stroke-width="3" stroke-linecap="round"/>
+        <line x1="64" y1="28" x2="64" y2="52" stroke="#a8d5a2" stroke-width="3" stroke-linecap="round"/>
       </svg>
-      <span class="header-name">Jejum</span>
+      <span class="hdr-name">JEJUM</span>
     </div>
-    <span class="header-date" id="hdr-date"></span>
+    <span class="hdr-date" id="hdr-date"></span>
   </div>
 
   <div class="scroll">
 
-    <!-- Banner instalar -->
-    <div id="install-banner">
-      <span>📲 <strong>Instalar como app?</strong></span>
-      <button class="ibtn-yes" id="btn-iyes">Instalar</button>
-      <button class="ibtn-no" id="btn-ino">✕</button>
-    </div>
+    <div id="ib"><span>📲 <strong>Instalar como app?</strong></span><button class="ib-y" id="ib-y">Instalar</button><button class="ib-n" id="ib-n">✕</button></div>
 
-    <!-- CONFIG (visível quando parado) -->
-    <div class="config-card" id="config-section">
-      <div class="config-label">Duração do jejum</div>
-
-      <div class="duration-row">
-        <input type="number" class="duration-input" id="dur-input" value="16" min="1" max="168" inputmode="numeric">
-        <span class="duration-unit">horas</span>
+    <!-- CONFIG -->
+    <div class="card" id="cfg">
+      <div class="sec">Duração do jejum</div>
+      <div class="dur-row">
+        <input type="number" class="dur-input" id="dur-input" value="16" min="1" max="168" inputmode="numeric">
+        <span class="dur-unit">HORAS</span>
       </div>
-
       <div>
-        <div class="config-label" style="margin-bottom:10px">Protocolos comuns</div>
+        <div class="sec" style="margin-bottom:10px">Protocolos comuns</div>
         <div class="presets">
-          <button class="preset-btn" data-h="12">12h</button>
-          <button class="preset-btn active" data-h="16">16h</button>
-          <button class="preset-btn" data-h="18">18h</button>
-          <button class="preset-btn" data-h="20">20h</button>
-          <button class="preset-btn" data-h="24">24h</button>
-          <button class="preset-btn" data-h="36">36h</button>
-          <button class="preset-btn" data-h="48">48h</button>
-          <button class="preset-btn" data-h="72">72h</button>
+          <button class="pre-btn" data-h="12">12h</button>
+          <button class="pre-btn active" data-h="16">16h</button>
+          <button class="pre-btn" data-h="18">18h</button>
+          <button class="pre-btn" data-h="20">20h</button>
+          <button class="pre-btn" data-h="24">24h</button>
+          <button class="pre-btn" data-h="36">36h</button>
+          <button class="pre-btn" data-h="48">48h</button>
+          <button class="pre-btn" data-h="72">72h</button>
         </div>
       </div>
-
-      <button class="start-btn" id="btn-start">Iniciar Jejum</button>
+      <button class="btn-start" id="btn-start">Iniciar Jejum</button>
     </div>
 
-    <!-- CÍRCULO (visível durante jejum) -->
-    <div class="circle-card hidden" id="circle-section">
+    <!-- CÍRCULO -->
+    <div class="circle-card hidden" id="circle-sec">
       <div class="circle-wrap">
         <svg class="circle-svg" viewBox="0 0 220 220">
           <circle class="circle-track" cx="110" cy="110" r="100"/>
@@ -384,34 +238,21 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-app
         </svg>
         <div class="circle-center">
           <div class="circle-time" id="c-time">00:00:00</div>
-          <div class="circle-sub">em jejum</div>
+          <div class="circle-sub">EM JEJUM</div>
           <div class="circle-pct" id="c-pct">0%</div>
         </div>
       </div>
-
       <div class="circle-stats">
-        <div class="stat-item">
-          <div class="stat-val" id="s-meta">16h</div>
-          <div class="stat-lbl">Meta</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-val" id="s-restante">16:00</div>
-          <div class="stat-lbl">Restante</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-val" id="s-termino">--:--</div>
-          <div class="stat-lbl">Término</div>
-        </div>
+        <div class="stat-item"><div class="stat-val" id="s-meta">16h</div><div class="stat-lbl">Meta</div></div>
+        <div class="stat-item"><div class="stat-val" id="s-rest">16:00</div><div class="stat-lbl">Restante</div></div>
+        <div class="stat-item"><div class="stat-val" id="s-term">--:--</div><div class="stat-lbl">Término</div></div>
       </div>
-
-      <button class="stop-btn" id="btn-stop">Encerrar Jejum</button>
+      <button class="btn-stop" id="btn-stop">Encerrar Jejum</button>
     </div>
 
     <!-- MURAL -->
-    <div class="mural-card">
-      <div class="mural-header">
-        <span class="mural-title">O que acontece no seu corpo</span>
-      </div>
+    <div class="card">
+      <div class="sec">O que acontece no seu corpo</div>
       <div class="mural-list" id="mural-list"></div>
     </div>
 
@@ -419,245 +260,194 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-app
 </div>
 
 <script>
-// ── Dados do mural ───────────────────────────────────────
+// ── DADOS DO MURAL ─────────────────────────────────────
 const EVENTS = [
-  { h: 0,   icon: '🍽️',  title: 'Jejum iniciado',           desc: 'Insulina começa a cair. Seu corpo inicia a transição do estado alimentado para o estado de jejum.' },
-  { h: 2,   icon: '⬇️',  title: 'Insulina em queda',        desc: 'Os níveis de insulina caem significativamente, sinalizando ao corpo para parar de armazenar gordura.' },
-  { h: 4,   icon: '🔄',  title: 'Glicogênio sendo usado',   desc: 'O corpo começa a consumir o glicogênio (açúcar armazenado no fígado e músculos) como combustível.' },
-  { h: 6,   icon: '🧹',  title: 'Autofagia leve',           desc: 'O processo de autofagia — limpeza celular — começa a se intensificar. Células danificadas são recicladas.' },
-  { h: 8,   icon: '🔥',  title: 'Queima de gordura inicia', desc: 'Com o glicogênio quase esgotado, o corpo começa a oxidar ácidos graxos para gerar energia.' },
-  { h: 12,  icon: '🌊',  title: 'Cetose leve',              desc: 'O fígado começa a produzir corpos cetônicos. O cérebro começa a usar cetonas como combustível alternativo.' },
-  { h: 14,  icon: '💡',  title: 'Clareza mental',           desc: 'Muitas pessoas relatam aumento de foco e clareza mental com a produção crescente de cetonas.' },
-  { h: 16,  icon: '🏆',  title: 'Marco 16:8',               desc: 'Ponto ideal do jejum intermitente. Autofagia ativa, queima de gordura intensa e hormônio do crescimento elevado.' },
-  { h: 18,  icon: '🦾',  title: 'GH em alta',               desc: 'O hormônio do crescimento (GH) pode aumentar até 5x, protegendo massa muscular e acelerando a queima de gordura.' },
-  { h: 20,  icon: '⚡',  title: 'Cetose profunda',          desc: 'Produção intensa de cetonas. Energia estável e sem picos de insulina. Estado metabólico otimizado.' },
-  { h: 24,  icon: '🔬',  title: 'Autofagia intensa',        desc: 'Jejum de 24h ativa fortemente a autofagia. Proteínas mal dobradas e organelas danificadas são eliminadas.' },
-  { h: 36,  icon: '🧠',  title: 'Neuroproteção',            desc: 'Produção de BDNF (fator neurotrófico) aumenta. O jejum prolongado pode proteger e regenerar neurônios.' },
-  { h: 48,  icon: '🌱',  title: 'Células-tronco ativas',    desc: 'Jejuns de 48h+ podem estimular a regeneração de células-tronco do sistema imunológico e intestinal.' },
-  { h: 72,  icon: '♻️',  title: 'Renovação imunológica',    desc: 'Após 72h, estudos indicam renovação significativa do sistema imune. O corpo "reinicia" defesas celulares.' },
+  {h:0,  icon:'🍽️', title:'Jejum iniciado',          desc:'Insulina começa a cair. O corpo inicia a transição do estado alimentado para o estado de jejum.'},
+  {h:2,  icon:'⬇️', title:'Insulina em queda',        desc:'Os níveis de insulina caem significativamente, sinalizando ao corpo para parar de armazenar gordura.'},
+  {h:4,  icon:'🔄', title:'Glicogênio sendo usado',   desc:'O corpo começa a consumir o glicogênio (açúcar armazenado no fígado e músculos) como combustível.'},
+  {h:6,  icon:'🧹', title:'Autofagia leve',            desc:'O processo de autofagia — limpeza celular — começa a se intensificar. Células danificadas são recicladas.'},
+  {h:8,  icon:'🔥', title:'Queima de gordura inicia', desc:'Com o glicogênio quase esgotado, o corpo começa a oxidar ácidos graxos para gerar energia.'},
+  {h:12, icon:'🌊', title:'Cetose leve',               desc:'O fígado começa a produzir corpos cetônicos. O cérebro passa a usar cetonas como combustível alternativo.'},
+  {h:14, icon:'💡', title:'Clareza mental',            desc:'Muitas pessoas relatam aumento de foco e clareza mental com a produção crescente de cetonas.'},
+  {h:16, icon:'🏆', title:'Marco 16:8',                desc:'Ponto ideal do jejum intermitente. Autofagia ativa, queima de gordura intensa e hormônio do crescimento elevado.'},
+  {h:18, icon:'🦾', title:'GH em alta',                desc:'O hormônio do crescimento (GH) pode aumentar até 5x, protegendo massa muscular e acelerando a queima de gordura.'},
+  {h:20, icon:'⚡', title:'Cetose profunda',           desc:'Produção intensa de cetonas. Energia estável, sem picos de insulina. Estado metabólico otimizado.'},
+  {h:24, icon:'🔬', title:'Autofagia intensa',         desc:'24h de jejum ativa fortemente a autofagia. Proteínas mal dobradas e organelas danificadas são eliminadas.'},
+  {h:36, icon:'🧠', title:'Neuroproteção',             desc:'Produção de BDNF (fator neurotrófico) aumenta. O jejum prolongado pode proteger e regenerar neurônios.'},
+  {h:48, icon:'🌱', title:'Células-tronco ativas',    desc:'Jejuns de 48h+ podem estimular a regeneração de células-tronco do sistema imunológico e intestinal.'},
+  {h:72, icon:'♻️', title:'Renovação imunológica',    desc:'Após 72h, estudos indicam renovação significativa do sistema imune. O corpo reinicia suas defesas celulares.'},
 ];
 
-// ── Estado ────────────────────────────────────────────────
-let state = {
-  running: false,
-  startTime: null,
-  goalHours: 16,
-  intervalId: null,
-};
+// ── ESTADO ─────────────────────────────────────────────
+const ST = {running:false, startTime:null, goalHours:16, timerId:null};
 
-// Restaurar estado do localStorage
-function loadState() {
-  try {
-    const s = JSON.parse(localStorage.getItem('jejum_state'));
-    if (s && s.running && s.startTime) {
-      state.running = true;
-      state.startTime = s.startTime;
-      state.goalHours = s.goalHours || 16;
+function loadState(){
+  try{
+    const s=JSON.parse(localStorage.getItem('jejum_v2'));
+    if(s&&s.running&&s.startTime){
+      ST.running=true; ST.startTime=s.startTime; ST.goalHours=s.goalHours||16;
       return true;
     }
-  } catch(e) {}
+  }catch(e){}
   return false;
 }
-
-function saveState() {
-  localStorage.setItem('jejum_state', JSON.stringify({
-    running: state.running,
-    startTime: state.startTime,
-    goalHours: state.goalHours,
-  }));
+function saveState(){
+  localStorage.setItem('jejum_v2',JSON.stringify({running:ST.running,startTime:ST.startTime,goalHours:ST.goalHours}));
 }
 
-// ── Data no header ────────────────────────────────────────
-function updateDate() {
-  const now = new Date();
-  const opts = { weekday: 'short', day: '2-digit', month: 'short' };
-  document.getElementById('hdr-date').textContent =
-    now.toLocaleDateString('pt-BR', opts).toUpperCase();
+// ── DATA NO HEADER ─────────────────────────────────────
+function updateDate(){
+  document.getElementById('hdr-date').textContent=
+    new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'}).toUpperCase();
 }
 
-// ── Mural ─────────────────────────────────────────────────
-function buildMural(elapsedH) {
-  const list = document.getElementById('mural-list');
-  list.innerHTML = '';
+// ── MURAL ──────────────────────────────────────────────
+function buildMural(elapsedH){
+  const list=document.getElementById('mural-list');
+  if(!list) return;
+  list.innerHTML='';
 
-  // Encontrar evento ativo (último alcançado / atual)
-  let activeIdx = -1;
-  EVENTS.forEach((ev, i) => {
-    if (elapsedH >= ev.h) activeIdx = i;
-  });
+  let activeIdx=-1;
+  EVENTS.forEach((ev,i)=>{ if(elapsedH>=ev.h) activeIdx=i; });
 
-  EVENTS.forEach((ev, i) => {
-    const reached = elapsedH >= ev.h;
-    const isActive = i === activeIdx && state.running;
+  EVENTS.forEach((ev,i)=>{
+    const reached=elapsedH>=ev.h;
+    const isActive=i===activeIdx;
+    const isLast=i===EVENTS.length-1;
 
-    const item = document.createElement('div');
-    item.className = 'mural-item' + (reached ? ' reached' : '') + (isActive ? ' active-event' : '');
-
-    const isLast = i === EVENTS.length - 1;
-    item.innerHTML = `
-      <div class="mural-dot-wrap">
+    const item=document.createElement('div');
+    item.className='mural-item'+(reached?' reached':'')+(isActive?' active-now':'');
+    item.innerHTML=`
+      <div class="mural-left">
         <div class="mural-dot"></div>
-        ${!isLast ? '<div class="mural-line"></div>' : ''}
+        ${!isLast?'<div class="mural-line"></div>':''}
       </div>
       <div class="mural-body">
-        <div class="mural-time">${ev.h}h ${ev.icon}</div>
-        <div class="mural-event">${ev.title}</div>
+        <div class="mural-ts">${ev.h}h ${ev.icon}</div>
+        <div class="mural-ev">${ev.title}</div>
         <div class="mural-desc">${ev.desc}</div>
-      </div>
-    `;
+      </div>`;
     list.appendChild(item);
   });
 }
 
-// ── Círculo ───────────────────────────────────────────────
-const CIRCUMFERENCE = 2 * Math.PI * 100; // ≈ 628
+// ── CÍRCULO ────────────────────────────────────────────
+const CIRC=2*Math.PI*100; // 628
 
-function updateCircle() {
-  if (!state.running) return;
+function updateCircle(){
+  if(!ST.running) return;
+  const now=Date.now();
+  const eMs=now-ST.startTime;
+  const eSec=Math.floor(eMs/1000);
+  const goalSec=ST.goalHours*3600;
+  const pct=Math.min(eMs/(goalSec*1000),1);
 
-  const now = Date.now();
-  const elapsedMs = now - state.startTime;
-  const elapsedSec = Math.floor(elapsedMs / 1000);
-  const goalSec = state.goalHours * 3600;
-  const pct = Math.min(elapsedMs / (goalSec * 1000), 1);
+  // Timer
+  const h=Math.floor(eSec/3600),m=Math.floor((eSec%3600)/60),s=eSec%60;
+  document.getElementById('c-time').textContent=
+    String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
 
-  // Tempo decorrido
-  const h = Math.floor(elapsedSec / 3600);
-  const m = Math.floor((elapsedSec % 3600) / 60);
-  const s = elapsedSec % 60;
-  document.getElementById('c-time').textContent =
-    String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-
-  // % e anel
-  const pctDisplay = Math.floor(pct * 100);
-  document.getElementById('c-pct').textContent = pctDisplay + '%';
-  const ring = document.getElementById('ring');
-  ring.style.strokeDashoffset = CIRCUMFERENCE * (1 - pct);
-  if (pct >= 1) ring.classList.add('over');
-  else ring.classList.remove('over');
+  // Porcentagem e anel
+  document.getElementById('c-pct').textContent=Math.floor(pct*100)+'%';
+  const ring=document.getElementById('ring');
+  ring.style.strokeDashoffset=CIRC*(1-pct);
+  ring.classList.toggle('over',pct>=1);
 
   // Restante
-  const remainSec = Math.max(goalSec - elapsedSec, 0);
-  const rh = Math.floor(remainSec / 3600);
-  const rm = Math.floor((remainSec % 3600) / 60);
-  document.getElementById('s-restante').textContent =
-    String(rh).padStart(2,'0') + ':' + String(rm).padStart(2,'0');
+  const rSec=Math.max(goalSec-eSec,0);
+  const rh=Math.floor(rSec/3600),rm=Math.floor((rSec%3600)/60);
+  document.getElementById('s-rest').textContent=String(rh).padStart(2,'0')+':'+String(rm).padStart(2,'0');
 
-  // Meta
-  document.getElementById('s-meta').textContent = state.goalHours + 'h';
+  // Meta e término
+  document.getElementById('s-meta').textContent=ST.goalHours+'h';
+  const end=new Date(ST.startTime+goalSec*1000);
+  document.getElementById('s-term').textContent=String(end.getHours()).padStart(2,'0')+':'+String(end.getMinutes()).padStart(2,'0');
 
-  // Término
-  const endTime = new Date(state.startTime + goalSec * 1000);
-  document.getElementById('s-termino').textContent =
-    String(endTime.getHours()).padStart(2,'0') + ':' + String(endTime.getMinutes()).padStart(2,'0');
-
-  // Mural
-  const elapsedH = elapsedMs / 3600000;
-  buildMural(elapsedH);
+  // Atualiza mural com horas decorridas
+  buildMural(eMs/3600000);
 }
 
-// ── Iniciar / Parar ───────────────────────────────────────
-function showRunning() {
-  document.getElementById('config-section').classList.add('hidden');
-  document.getElementById('circle-section').classList.remove('hidden');
+// ── MOSTRAR / ESCONDER ─────────────────────────────────
+function showRunning(){
+  document.getElementById('cfg').classList.add('hidden');
+  document.getElementById('circle-sec').classList.remove('hidden');
+}
+function showConfig(){
+  document.getElementById('cfg').classList.remove('hidden');
+  document.getElementById('circle-sec').classList.add('hidden');
 }
 
-function showConfig() {
-  document.getElementById('config-section').classList.remove('hidden');
-  document.getElementById('circle-section').classList.add('hidden');
-}
+// ── INICIAR ────────────────────────────────────────────
+document.getElementById('btn-start').addEventListener('click',()=>{
+  const h=parseInt(document.getElementById('dur-input').value);
+  if(isNaN(h)||h<1) return;
+  ST.goalHours=h; ST.startTime=Date.now(); ST.running=true;
+  saveState(); showRunning(); updateCircle();
+  if(ST.timerId) clearInterval(ST.timerId);
+  ST.timerId=setInterval(updateCircle,1000);
+});
 
-function startFast() {
-  const h = parseInt(document.getElementById('dur-input').value);
-  if (isNaN(h) || h < 1) return;
-  state.goalHours = h;
-  state.startTime = Date.now();
-  state.running = true;
-  saveState();
-  showRunning();
-  updateCircle();
-  state.intervalId = setInterval(updateCircle, 1000);
-  buildMural(0);
-}
+// ── ENCERRAR ───────────────────────────────────────────
+document.getElementById('btn-stop').addEventListener('click',()=>{
+  if(!confirm('Encerrar o jejum agora?')) return;
+  clearInterval(ST.timerId);
+  ST.running=false; ST.startTime=null;
+  saveState(); showConfig(); buildMural(0);
+});
 
-function stopFast() {
-  if (!confirm('Encerrar o jejum agora?')) return;
-  clearInterval(state.intervalId);
-  state.running = false;
-  state.startTime = null;
-  saveState();
-  showConfig();
-  buildMural(0);
-}
-
-document.getElementById('btn-start').addEventListener('click', startFast);
-document.getElementById('btn-stop').addEventListener('click', stopFast);
-
-// ── Presets ───────────────────────────────────────────────
-document.querySelectorAll('.preset-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+// ── PRESETS ────────────────────────────────────────────
+document.querySelectorAll('.pre-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.pre-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
-    document.getElementById('dur-input').value = btn.dataset.h;
+    document.getElementById('dur-input').value=btn.dataset.h;
   });
 });
-
-document.getElementById('dur-input').addEventListener('input', () => {
-  const v = parseInt(document.getElementById('dur-input').value);
-  document.querySelectorAll('.preset-btn').forEach(b => {
-    b.classList.toggle('active', parseInt(b.dataset.h) === v);
-  });
+document.getElementById('dur-input').addEventListener('input',()=>{
+  const v=parseInt(document.getElementById('dur-input').value);
+  document.querySelectorAll('.pre-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.h)===v));
 });
 
-// ── Tela cheia ────────────────────────────────────────────
-const app = document.getElementById('main-app');
-const goFull = () => {
-  if (!document.fullscreenElement)
-    app.requestFullscreen().catch(() => {});
-  document.removeEventListener('click', goFull);
-  document.removeEventListener('touchstart', goFull);
+// ── TELA CHEIA ─────────────────────────────────────────
+const appEl=document.getElementById('main-app');
+const goFull=()=>{
+  if(!document.fullscreenElement) appEl.requestFullscreen().catch(()=>{});
+  document.removeEventListener('click',goFull);
+  document.removeEventListener('touchstart',goFull);
 };
-document.addEventListener('click', goFull);
-document.addEventListener('touchstart', goFull);
+document.addEventListener('click',goFull);
+document.addEventListener('touchstart',goFull);
 
-// ── Service Worker ────────────────────────────────────────
-if ('serviceWorker' in navigator)
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+// ── SERVICE WORKER ─────────────────────────────────────
+if('serviceWorker' in navigator)
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 
-// ── Banner instalação ─────────────────────────────────────
-let dPrm = null;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); dPrm = e;
-  document.getElementById('install-banner').classList.add('visible');
-});
-document.getElementById('btn-iyes').addEventListener('click', async () => {
-  document.getElementById('install-banner').classList.remove('visible');
-  if (dPrm) { dPrm.prompt(); await dPrm.userChoice; dPrm = null; }
-});
-document.getElementById('btn-ino').addEventListener('click', () => {
-  document.getElementById('install-banner').classList.remove('visible');
-});
-window.addEventListener('appinstalled', () =>
-  document.getElementById('install-banner').classList.remove('visible'));
+// ── BANNER INSTALAR ────────────────────────────────────
+let dPrm=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dPrm=e;document.getElementById('ib').classList.add('show');});
+document.getElementById('ib-y').addEventListener('click',async()=>{document.getElementById('ib').classList.remove('show');if(dPrm){dPrm.prompt();await dPrm.userChoice;dPrm=null;}});
+document.getElementById('ib-n').addEventListener('click',()=>document.getElementById('ib').classList.remove('show'));
+window.addEventListener('appinstalled',()=>document.getElementById('ib').classList.remove('show'));
 
-// ── Splash ────────────────────────────────────────────────
-window.addEventListener('load', () => {
-  setTimeout(() => {
+// ── SPLASH ─────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
     document.getElementById('splash').classList.add('hide');
-    setTimeout(() => document.getElementById('splash').remove(), 700);
-  }, 1800);
+    setTimeout(()=>{const s=document.getElementById('splash');if(s)s.remove();},800);
+  },1800);
 });
 
-// ── Init ──────────────────────────────────────────────────
+// ── INIT ───────────────────────────────────────────────
 updateDate();
-setInterval(updateDate, 60000);
+setInterval(updateDate,60000);
 
-if (loadState()) {
+// Mural sempre visível desde o início
+buildMural(0);
+
+if(loadState()){
   showRunning();
   updateCircle();
-  state.intervalId = setInterval(updateCircle, 1000);
-} else {
-  buildMural(0);
+  ST.timerId=setInterval(updateCircle,1000);
 }
 </script>
 </body>
