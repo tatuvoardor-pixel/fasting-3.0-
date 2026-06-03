@@ -430,18 +430,14 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
           <button class="pre-btn" data-h="72">72h</button>
         </div>
 
-        <!-- Ajuste retroativo simples -->
-        <div class="lbl">Já estava em jejum?</div>
-        <div class="retro-simple">
-          <div class="retro-simple-lbl">
-            <strong>Que horas parou de comer?</strong><br>
-            Se esqueceu de abrir o app antes
-          </div>
-          <input type="time" class="retro-time-sel" id="retro-time" onchange="onRetroChange()">
-        </div>
-        <div class="retro-preview-txt" id="retro-preview" style="text-align:center;min-height:16px;"></div>
-
         <button class="btn-start" id="btn-start">Iniciar Jejum</button>
+
+        <!-- Retroativo minimalista -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+          <span style="font-family:'Roboto Mono',monospace;font-size:0.62rem;color:var(--t3);letter-spacing:1px;">← Comecei às</span>
+          <input type="time" id="retro-time" onchange="onRetroChange()" style="background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--grn);font-family:'Fredoka',sans-serif;font-size:0.95rem;outline:none;padding:2px 4px;cursor:pointer;">
+        </div>
+        <div id="retro-preview" style="text-align:center;font-family:'Roboto Mono',monospace;font-size:0.6rem;color:var(--grn);letter-spacing:1px;min-height:14px;"></div>
       </div>
 
     </div>
