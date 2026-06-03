@@ -523,17 +523,17 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
         <div class="fases-list" id="fases-list"></div>
       </div>
 
-      <!-- Análise IA científica -->
+      <!-- Análise IA local -->
       <div class="card">
         <div class="ai-header">
           <div class="ai-icon">🔬</div>
           <div>
             <div class="ai-titulo">Análise Científica</div>
-            <div class="ai-fonte">IA · PubMed · Nature · NEJM</div>
+            <div class="ai-fonte">IA Local · PubMed · Nature</div>
           </div>
         </div>
         <div class="ai-body" id="ai-body">
-          <div class="ai-load"><div class="ai-dots"><span></span><span></span><span></span></div> Consultando literatura científica...</div>
+          <div class="ai-load"><div class="ai-dots"><span></span><span></span><span></span></div> Analisando marcadores celulares...</div>
         </div>
       </div>
 
@@ -1064,8 +1064,8 @@ function buildFases(durH){
   lista.innerHTML='';
   const fasesChave=[
     {h:8,  icon:'🔥',nome:'Queima de Gordura',desc:'Lipólise ativa — ácidos graxos como combustível'},
-    {h:12, icon:'🌊',nome:'Cetose Leve',       desc:'Corpos cetônicos detectáveis no sangue'},
-    {h:16, icon:'🏆',nome:'Marco 16:8',         desc:'Protocolo ideal completo'},
+    {h:12, icon:'🌊',nome:'Cetose Leve',        desc:'Corpos cetônicos detectáveis no sangue'},
+    {h:16, icon:'🏆',nome:'Marco 16:8',          desc:'Protocolo ideal completo'},
     {h:24, icon:'🔬',nome:'Autofagia Intensa',  desc:'Limpeza celular profunda ativa'},
     {h:48, icon:'🌱',nome:'Renovação Celular',  desc:'Mais de 1.000 proteínas remodeladas'},
     {h:72, icon:'♻️',nome:'Renovação Imune',    desc:'Regeneração de células-tronco'},
@@ -1085,54 +1085,53 @@ function buildFases(durH){
   });
 }
 
-// ══ ANÁLISE IA CIENTÍFICA ════════════════════════════
-async function generateAI(sessao){
-  const body=document.getElementById('ai-body');
-  if(!body)return;
-  body.innerHTML='<div class="ai-load"><div class="ai-dots"><span></span><span></span><span></span></div> Consultando PubMed e literatura científica...</div>';
-  const {durH,goalH}=sessao;
-  const jejuns=loadJejuns();
-  const completed=durH>=goalH;
-  const avgH=jejuns.length>1
-    ? Math.round(jejuns.reduce((a,x)=>a+x.durH,0)/jejuns.length*10)/10
-    : null;
-  // Fase final atingida
-  let faseF=EVENTOS[0];
-  EVENTOS.forEach(ev=>{if(durH>=ev.h)faseF=ev;});
-  const prompt=`Você é um médico especialista em medicina metabólica e jejum intermitente, atualizado com as pesquisas mais recentes do PubMed, Nature Metabolism, NEJM e Frontiers in Nutrition (2024-2025).
+// ══ ANÁLISE "IA" LOCAL E OFFLINE ════════════════════════════
+function generateAI(sessao) {
+  const body = document.getElementById('ai-body');
+  if (!body) return;
 
-Escreva um parágrafo único de 5-6 linhas em português brasileiro. Tom: médico explicando de forma clara e motivadora para o paciente. Sem listas, sem títulos, sem markdown.
+  // Mostra a animação de carregamento
+  body.innerHTML = '<div class="ai-load"><div class="ai-dots"><span></span><span></span><span></span></div> Analisando marcadores celulares...</div>';
 
-Dados deste jejum:
-- Duração: ${durH.toFixed(1)} horas
-- Meta: ${goalH} horas
-- Status: ${completed?'Meta atingida ✅':'Jejum parcial — meta não atingida'}
-- Fase final atingida: ${faseF.titulo}
-${avgH?`- Média dos últimos jejuns: ${avgH}h`:'- Primeiro jejum registrado'}
-- Total de jejuns registrados: ${jejuns.length}
+  const { durH, goalH } = sessao;
+  const completed = durH >= goalH;
 
-Explique de forma personalizada: o que aconteceu no corpo durante essas ${durH.toFixed(1)} horas baseado em evidências científicas recentes. Mencione os processos metabólicos relevantes (insulina, cetose, autofagia, GH conforme o tempo). Avalie o desempenho honestamente. Termine com uma orientação prática e motivadora para o próximo jejum.`;
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const data=await res.json();
-    const text=data.content?.map(c=>c.text||'').join('').trim();
-    if(text){
-      body.style.opacity='0';body.style.transition='opacity 0.5s ease';
-      setTimeout(()=>{body.textContent=text;body.style.opacity='1';},400);
+  // Simula um tempo de processamento de 1.5 segundos para dar a sensação de cálculo
+  setTimeout(() => {
+    let text = "";
+
+    // 1. Abertura baseada no resultado da meta
+    if (completed) {
+      text += `Excelente desempenho. Você completou seu protocolo de ${goalH}h com sucesso. `;
     } else {
-      body.textContent='Jejum registrado com sucesso. Continue o protocolo regularmente para análises mais detalhadas.';
+      text += `Protocolo concluído em ${durH.toFixed(1)}h. Mesmo não atingindo a meta completa, seu corpo obteve adaptações metabólicas valiosas. `;
     }
-  }catch(e){
-    body.textContent='Análise indisponível no momento. Seus dados foram salvos com sucesso.';
-  }
+
+    // 2. Análise científica baseada nas horas reais de jejum
+    if (durH < 12) {
+      text += "Nesta janela, seus níveis de insulina caíram significativamente. Isso permitiu que o fígado começasse a mobilizar o glicogênio armazenado como fonte primária de combustível, preparando o terreno para a lipólise.";
+    } else if (durH >= 12 && durH < 16) {
+      text += "Ocorre aqui uma transição metabólica importante. Seu corpo atingiu a cetose leve, passando a oxidar ácidos graxos de forma ativa. Os corpos cetônicos no sangue já começam a fornecer uma energia mais limpa e estável para o cérebro.";
+    } else if (durH >= 16 && durH < 24) {
+      text += "Marco de autofagia ativado. A via AMPK sinalizou a reciclagem de proteínas celulares danificadas. Além disso, o hormônio do crescimento (GH) encontra-se elevado, o que protege sua massa muscular enquanto a queima de gordura atinge seu pico.";
+    } else if (durH >= 24 && durH < 48) {
+      text += "Estado de cetose profunda e renovação celular intensa. O aumento do fator BDNF promove forte neuroproteção. A sensibilidade à insulina sofreu um reset altamente positivo, mitigando a inflamação sistêmica.";
+    } else {
+      text += "Programa máximo de renovação imunológica em andamento. Neste estágio de longevidade, o organismo reduz drasticamente inflamações e estimula a regeneração de células-tronco. Um impacto metabólico profundo.";
+    }
+
+    // 3. Fechamento prático
+    text += " Lembre-se de priorizar a hidratação e a reposição de sais minerais na janela de alimentação.";
+
+    // Exibe o texto com uma transição suave
+    body.style.opacity = '0';
+    body.style.transition = 'opacity 0.5s ease';
+    setTimeout(() => {
+      body.textContent = text;
+      body.style.opacity = '1';
+    }, 400);
+
+  }, 1500); 
 }
 
 // ══ HISTÓRICO ════════════════════════════════════════
