@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- JEJUM TRACKER © 2025 — Todos os direitos reservados -->
-<!-- Criado por: Eliezer Silva Giorni — Versão 3.2 — IA Científica Offline -->
+<!-- Criado por: Eliezer Silva Giorni — Versão 3.3 -->
+<!-- CORREÇÕES V3.3: Lilita One, letter-spacing:0, glow menor, lerp rápido, initRing fix, template→concat, SW domain -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -10,41 +11,53 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#09090b">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- FIX: Lilita One -->
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <script>
 (function(){
-  const ico=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#09090b"/><ellipse cx="256" cy="300" rx="130" ry="24" fill="none" stroke="#10b981" stroke-width="18" stroke-linecap="round"/><ellipse cx="256" cy="300" rx="82" ry="14" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round" opacity="0.4"/><line x1="256" y1="150" x2="256" y2="276" stroke="#10b981" stroke-width="18" stroke-linecap="round"/><line x1="206" y1="174" x2="206" y2="252" stroke="#10b981" stroke-width="12" stroke-linecap="round"/><line x1="306" y1="174" x2="306" y2="252" stroke="#10b981" stroke-width="12" stroke-linecap="round"/></svg>`;
-  const iUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(ico);
-  const mf={name:"JEJUM",short_name:"JEJUM",display:"fullscreen",orientation:"portrait",start_url:"./index.html",scope:"./",background_color:"#09090b",theme_color:"#09090b",icons:[{src:iUrl,sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"}]};
-  const ml=document.createElement('link');ml.rel='manifest';ml.href='data:application/manifest+json;charset=utf-8,'+encodeURIComponent(JSON.stringify(mf));document.head.appendChild(ml);
-  const il=document.createElement('link');il.rel='apple-touch-icon';il.href=iUrl;document.head.appendChild(il);
+  var ico='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'+
+    '<rect width="512" height="512" rx="112" fill="#09090b"/>'+
+    '<ellipse cx="256" cy="300" rx="130" ry="24" fill="none" stroke="#10b981" stroke-width="18" stroke-linecap="round"/>'+
+    '<ellipse cx="256" cy="300" rx="82" ry="14" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round" opacity="0.4"/>'+
+    '<line x1="256" y1="150" x2="256" y2="276" stroke="#10b981" stroke-width="18" stroke-linecap="round"/>'+
+    '<line x1="206" y1="174" x2="206" y2="252" stroke="#10b981" stroke-width="12" stroke-linecap="round"/>'+
+    '<line x1="306" y1="174" x2="306" y2="252" stroke="#10b981" stroke-width="12" stroke-linecap="round"/>'+
+    '</svg>';
+  var iUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(ico);
+  var mf={name:"JEJUM",short_name:"JEJUM",display:"fullscreen",orientation:"portrait",start_url:"./",background_color:"#09090b",theme_color:"#09090b",icons:[{src:iUrl,sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"}]};
+  var ml=document.createElement('link');ml.rel='manifest';ml.href='data:application/manifest+json;charset=utf-8,'+encodeURIComponent(JSON.stringify(mf));document.head.appendChild(ml);
+  var il=document.createElement('link');il.rel='apple-touch-icon';il.href=iUrl;document.head.appendChild(il);
 })();
 </script>
 <style>
 :root{--bg:#09090b;--s1:#111114;--s2:#18181c;--s3:#242428;--bd:#36363e;--tx:#f4f4f5;--t2:#a1a1aa;--t3:#62626e;--grn:#10b981;--grn-d:#10b98112;--grn-m:#10b98145;--grn2:#34d399;--grn3:#6ee7b7;--gold:#f59e0b;--org:#f97316;--red:#ef4444;--blu:#3b82f6;}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body,html{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:hidden;position:fixed;top:0;left:0;font-family:'Inter',sans-serif;}
+/* FIX: letter-spacing:0 em tudo */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;letter-spacing:0!important;}
+html,body{width:100%;max-width:100vw;height:100%;background:var(--bg);color:var(--tx);overflow:hidden;position:fixed;top:0;left:0;font-family:'Inter',sans-serif;}
 button{border:none;background:none;padding:0;margin:0;font-family:inherit;color:inherit;cursor:pointer;outline:none;}
 #dna-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 #splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:999;transition:opacity 0.9s ease;padding:0 30px;}
 #splash.hide{opacity:0;pointer-events:none;}
 #splash .sp-prato{width:80px;height:80px;animation:spUp 1s ease forwards;opacity:0;}
-#splash .sp-name{font-family:'Fredoka',sans-serif;font-size:2rem;letter-spacing:3px;color:var(--grn);animation:spUp 1s 0.2s ease forwards;opacity:0;text-align:center;}
-#splash .sp-sub{font-family:'Roboto Mono',monospace;font-size:0.58rem;letter-spacing:4px;text-transform:uppercase;color:var(--t3);animation:spUp 1s 0.4s ease forwards;opacity:0;text-align:center;}
+/* FIX: Lilita One */
+#splash .sp-name{font-family:'Lilita One',cursive;font-size:2rem;color:var(--grn);animation:spUp 1s 0.2s ease forwards;opacity:0;text-align:center;}
+#splash .sp-sub{font-family:'Roboto Mono',monospace;font-size:0.58rem;text-transform:uppercase;color:var(--t3);animation:spUp 1s 0.4s ease forwards;opacity:0;text-align:center;}
 @keyframes spUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 .app{display:flex;flex-direction:column;width:100vw;height:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);position:relative;z-index:10;}
 .hdr{padding:11px 13px 9px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:8px;border-bottom:1px solid var(--bd);}
 .hlogo{display:flex;align-items:center;gap:8px;min-width:0;flex:1;}
 .hlogo svg{width:24px;height:24px;flex-shrink:0;}
-.hname{font-family:'Fredoka',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--grn);}
-.hdate{font-family:'Roboto Mono',monospace;font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--t3);}
+/* FIX: Lilita One */
+.hname{font-family:'Lilita One',cursive;font-size:1.1rem;color:var(--grn);}
+.hdate{font-family:'Roboto Mono',monospace;font-size:0.58rem;text-transform:uppercase;color:var(--t3);}
 .scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:12px 13px 28px;display:flex;flex-direction:column;gap:10px;}
 .card{background:var(--s1);border:1px solid rgba(255,255,255,0.06);box-shadow:0 10px 28px rgba(0,0,0,0.65);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;}
-.lbl{font-family:'Roboto Mono',monospace;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--t3);}
+.lbl{font-family:'Roboto Mono',monospace;font-size:0.6rem;text-transform:uppercase;color:var(--t3);}
 .mes-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;}
 .mes-item{background:var(--s2);border-radius:8px;padding:9px 5px;display:flex;flex-direction:column;align-items:center;gap:1px;border:1px solid var(--bd);}
-.mes-val{font-family:'Fredoka',sans-serif;font-size:1.4rem;color:var(--grn);line-height:1;}
-.mes-lbl{font-family:'Roboto Mono',monospace;font-size:0.48rem;color:var(--t3);letter-spacing:1px;text-transform:uppercase;text-align:center;}
+/* FIX: Lilita One + clamp para evitar overflow nos 4 cards */
+.mes-val{font-family:'Lilita One',cursive;font-size:clamp(0.9rem,4vw,1.4rem);color:var(--grn);line-height:1;}
+.mes-lbl{font-family:'Roboto Mono',monospace;font-size:0.48rem;color:var(--t3);text-transform:uppercase;text-align:center;}
 .mini-hist{display:flex;flex-direction:column;gap:6px;}
 .mh-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--s2);border-radius:8px;border:1px solid var(--bd);}
 .mh-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
@@ -54,63 +67,69 @@ button{border:none;background:none;padding:0;margin:0;font-family:inherit;color:
 .mh-pct{font-family:'Roboto Mono',monospace;font-size:0.65rem;font-weight:700;}
 .home-prato{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 0;}
 .home-prato svg{width:72px;height:72px;}
-.home-prato-txt{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--t3);}
+.home-prato-txt{font-family:'Oswald',sans-serif;font-size:0.7rem;text-transform:uppercase;color:var(--t3);}
 .dur-row{display:flex;align-items:center;gap:10px;}
-.dur-input{flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:10px;color:var(--tx);font-family:'Fredoka',sans-serif;font-size:1.9rem;padding:9px 14px;outline:none;text-align:center;-webkit-appearance:none;appearance:none;transition:border-color 0.2s;}
+/* FIX: Lilita One */
+.dur-input{flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:10px;color:var(--tx);font-family:'Lilita One',cursive;font-size:1.9rem;padding:9px 14px;outline:none;text-align:center;-webkit-appearance:none;appearance:none;transition:border-color 0.2s;}
 .dur-input:focus{border-color:var(--grn);}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;appearance:none;}
-.dur-unit{font-family:'Oswald',sans-serif;font-size:0.82rem;color:var(--t3);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.dur-unit{font-family:'Oswald',sans-serif;font-size:0.82rem;color:var(--t3);text-transform:uppercase;white-space:nowrap;}
 .presets{display:flex;gap:5px;flex-wrap:wrap;}
 .pre-btn{background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:5px 11px;font-family:'Roboto Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--t2);cursor:pointer;transition:all 0.15s;}
 .pre-btn.active{background:var(--grn-d);border-color:var(--grn);color:var(--grn);}
-.btn-start{width:100%;padding:16px;background:var(--grn);color:#000;border:none;border-radius:10px;font-family:'Fredoka',sans-serif;font-size:1.15rem;letter-spacing:1px;cursor:pointer;transition:opacity 0.15s;}
+/* FIX: Lilita One */
+.btn-start{width:100%;padding:16px;background:var(--grn);color:#000;border:none;border-radius:10px;font-family:'Lilita One',cursive;font-size:1.15rem;cursor:pointer;transition:opacity 0.15s;}
 .btn-start:active{opacity:0.8;}
 .circle-section{display:flex;flex-direction:column;align-items:center;gap:16px;padding:12px 0;width:100%;}
 .circle-wrap{position:relative;width:min(74vw,270px);height:min(74vw,270px);margin:0 auto;}
 #ring-canvas{position:absolute;inset:0;width:100%;height:100%;}
 .circle-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:0 18%;}
-.liq-time{font-family:'Fredoka',sans-serif;font-size:clamp(1.5rem,8vw,2.2rem);color:var(--tx);line-height:1;text-align:center;white-space:nowrap;}
-.liq-lbl{font-family:'Oswald',sans-serif;font-size:0.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--t3);text-align:center;}
-.liq-pct{font-family:'Fredoka',sans-serif;font-size:clamp(0.9rem,3.5vw,1.2rem);color:var(--grn);margin-top:2px;text-align:center;}
+/* FIX: Lilita One */
+.liq-time{font-family:'Lilita One',cursive;font-size:clamp(1.5rem,8vw,2.2rem);color:var(--tx);line-height:1;text-align:center;white-space:nowrap;}
+.liq-lbl{font-family:'Oswald',sans-serif;font-size:0.58rem;text-transform:uppercase;color:var(--t3);text-align:center;}
+/* FIX: Lilita One */
+.liq-pct{font-family:'Lilita One',cursive;font-size:clamp(0.9rem,3.5vw,1.2rem);color:var(--grn);margin-top:2px;text-align:center;}
 .circle-stats{display:flex;gap:22px;justify-content:center;}
 .stat-item{display:flex;flex-direction:column;align-items:center;gap:1px;}
 .stat-val{font-family:'Roboto Mono',monospace;font-size:0.92rem;color:var(--tx);font-weight:700;}
-.stat-lbl{font-family:'Oswald',sans-serif;font-size:0.56rem;letter-spacing:1px;text-transform:uppercase;color:var(--t3);white-space:nowrap;}
+.stat-lbl{font-family:'Oswald',sans-serif;font-size:0.56rem;text-transform:uppercase;color:var(--t3);white-space:nowrap;}
 .ativo-btns{display:flex;gap:8px;width:100%;}
-.btn-stop{flex:1;padding:12px;background:transparent;color:var(--red);border:1px solid #4a1010;border-radius:10px;font-family:'Oswald',sans-serif;font-size:0.9rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background 0.15s;}
+.btn-stop{flex:1;padding:12px;background:transparent;color:var(--red);border:1px solid #4a1010;border-radius:10px;font-family:'Oswald',sans-serif;font-size:0.9rem;text-transform:uppercase;cursor:pointer;transition:background 0.15s;}
 .btn-stop:active{background:#120404;}
-.btn-voltar{padding:12px 16px;background:var(--s2);color:var(--t2);border:1px solid var(--bd);border-radius:10px;font-family:'Oswald',sans-serif;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.15s;flex-shrink:0;}
+.btn-voltar{padding:12px 16px;background:var(--s2);color:var(--t2);border:1px solid var(--bd);border-radius:10px;font-family:'Oswald',sans-serif;font-size:0.85rem;text-transform:uppercase;cursor:pointer;transition:all 0.15s;flex-shrink:0;}
 .body-card{background:var(--s1);border:1px solid rgba(255,255,255,0.06);box-shadow:0 10px 28px rgba(0,0,0,0.65);border-radius:12px;padding:15px;display:flex;flex-direction:column;gap:9px;transition:border-color 0.8s;}
 .body-top{display:flex;align-items:center;gap:10px;}
 .body-icon{font-size:1.5rem;flex-shrink:0;}
 .body-info{flex:1;}
-.body-title{font-family:'Oswald',sans-serif;font-size:0.95rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--tx);transition:color 0.8s;}
-.body-hora{font-family:'Roboto Mono',monospace;font-size:0.58rem;letter-spacing:1px;color:var(--grn);margin-top:2px;}
+.body-title{font-family:'Oswald',sans-serif;font-size:0.95rem;text-transform:uppercase;color:var(--tx);transition:color 0.8s;}
+.body-hora{font-family:'Roboto Mono',monospace;font-size:0.58rem;color:var(--grn);margin-top:2px;}
 .body-desc{font-size:0.76rem;color:var(--t2);line-height:1.6;}
 .body-prog-wrap{display:flex;flex-direction:column;gap:4px;}
 .body-prog-bar{height:3px;background:var(--s3);border-radius:2px;overflow:hidden;}
 .body-prog-fill{height:100%;background:var(--grn);border-radius:2px;transition:width 1s linear;}
 .body-next-row{display:flex;align-items:center;gap:5px;}
-.body-next-lbl{font-family:'Roboto Mono',monospace;font-size:0.55rem;letter-spacing:2px;text-transform:uppercase;color:var(--t3);white-space:nowrap;}
+.body-next-lbl{font-family:'Roboto Mono',monospace;font-size:0.55rem;text-transform:uppercase;color:var(--t3);white-space:nowrap;}
 .body-next-val{font-family:'Oswald',sans-serif;font-size:0.72rem;color:var(--t3);}
 .rep-header{display:flex;flex-direction:column;gap:4px;}
-.rep-date{font-family:'Roboto Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--t3);}
-.rep-titulo{font-family:'Fredoka',sans-serif;font-size:1.6rem;color:var(--tx);}
-.rep-dur{font-family:'Roboto Mono',monospace;font-size:3rem;color:var(--grn);font-weight:700;line-height:1;}
-.rep-dur-lbl{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--t3);}
+.rep-date{font-family:'Roboto Mono',monospace;font-size:0.6rem;text-transform:uppercase;color:var(--t3);}
+/* FIX: Lilita One */
+.rep-titulo{font-family:'Lilita One',cursive;font-size:1.6rem;color:var(--tx);}
+/* FIX: Lilita One */
+.rep-dur{font-family:'Lilita One',cursive;font-size:3rem;color:var(--grn);line-height:1;}
+.rep-dur-lbl{font-family:'Oswald',sans-serif;font-size:0.62rem;text-transform:uppercase;color:var(--t3);}
 .rep-badge{display:inline-flex;align-items:center;gap:6px;background:var(--grn-d);border:1px solid var(--grn-m);border-radius:20px;padding:5px 12px;margin-top:4px;width:fit-content;}
-.rep-badge-txt{font-family:'Oswald',sans-serif;font-size:0.78rem;color:var(--grn);letter-spacing:0.5px;}
+.rep-badge-txt{font-family:'Oswald',sans-serif;font-size:0.78rem;color:var(--grn);}
 .rep-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .rs-item{background:var(--s2);border-radius:8px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--bd);}
 .rs-val{font-family:'Roboto Mono',monospace;font-size:1.2rem;font-weight:700;}
-.rs-lbl{font-family:'Oswald',sans-serif;font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--t3);white-space:nowrap;}
+.rs-lbl{font-family:'Oswald',sans-serif;font-size:0.58rem;text-transform:uppercase;color:var(--t3);white-space:nowrap;}
 .fases-list{display:flex;flex-direction:column;gap:6px;}
 .fase-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;}
 .fase-item.fase-ok{background:var(--grn-d);border:1px solid var(--grn-m);}
 .fase-item.fase-no{background:var(--s2);border:1px solid var(--bd);opacity:0.5;}
 .fase-icon{font-size:1.1rem;flex-shrink:0;}
 .fase-info{flex:1;}
-.fase-nome{font-family:'Oswald',sans-serif;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.5px;}
+.fase-nome{font-family:'Oswald',sans-serif;font-size:0.85rem;text-transform:uppercase;}
 .fase-item.fase-ok .fase-nome{color:var(--grn);}
 .fase-item.fase-no .fase-nome{color:var(--t3);}
 .fase-desc{font-size:0.68rem;color:var(--t3);margin-top:1px;}
@@ -122,7 +141,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .hl-item{display:flex;align-items:center;gap:4px;font-family:'Roboto Mono',monospace;font-size:0.58rem;color:var(--t3);}
 .hl-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
 .cal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-.cal-lbl{font-family:'Roboto Mono',monospace;font-size:0.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--t3);}
+.cal-lbl{font-family:'Roboto Mono',monospace;font-size:0.58rem;text-transform:uppercase;color:var(--t3);}
 .cal-mon{font-family:'Oswald',sans-serif;font-size:0.85rem;text-transform:uppercase;color:var(--t2);}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
 .cal-dl{font-family:'Roboto Mono',monospace;font-size:0.5rem;color:var(--t3);text-align:center;padding-bottom:2px;}
@@ -146,13 +165,13 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .hi-fill-gold{height:100%;border-radius:2px;background:var(--gold);}
 .hi-meta{font-family:'Roboto Mono',monospace;font-size:0.56rem;color:var(--t2);}
 .hi-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;}
-.hi-dur{font-family:'Oswald',sans-serif;font-size:0.92rem;letter-spacing:0.5px;}
+.hi-dur{font-family:'Oswald',sans-serif;font-size:0.92rem;}
 .hi-ok{font-family:'Roboto Mono',monospace;font-size:0.55rem;color:var(--grn);}
 .del-btn{font-family:'Roboto Mono',monospace;font-size:0.52rem;color:var(--red);background:#ef444410;padding:3px 6px;border-radius:3px;border:1px solid #ef444430;text-transform:uppercase;}
 .ai-header{display:flex;align-items:center;gap:9px;}
 .ai-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--grn),var(--grn2));display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;}
-.ai-titulo{font-family:'Oswald',sans-serif;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.5px;}
-.ai-fonte{font-family:'Roboto Mono',monospace;font-size:0.54rem;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-top:1px;}
+.ai-titulo{font-family:'Oswald',sans-serif;font-size:0.9rem;text-transform:uppercase;}
+.ai-fonte{font-family:'Roboto Mono',monospace;font-size:0.54rem;text-transform:uppercase;color:var(--t3);margin-top:1px;}
 .ai-body{font-size:0.78rem;color:var(--t2);line-height:1.7;min-height:48px;}
 .ai-load{display:flex;align-items:center;gap:8px;color:var(--t3);font-size:0.72rem;}
 .ai-dots span{display:inline-block;width:4px;height:4px;border-radius:1px;animation:aiD 1.2s ease-in-out infinite;}
@@ -160,13 +179,14 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .ai-dots span:nth-child(2){background:var(--grn2);animation-delay:0.2s;}
 .ai-dots span:nth-child(3){background:var(--grn3);animation-delay:0.4s;}
 @keyframes aiD{0%,80%,100%{transform:scale(0.5);opacity:0.3;}40%{transform:scale(1);opacity:1;}}
-.btn-novo{width:100%;padding:15px;background:var(--grn);color:#000;border:none;border-radius:10px;font-family:'Fredoka',sans-serif;font-size:1.1rem;letter-spacing:1px;cursor:pointer;transition:opacity 0.15s;}
+/* FIX: Lilita One */
+.btn-novo{width:100%;padding:15px;background:var(--grn);color:#000;border:none;border-radius:10px;font-family:'Lilita One',cursive;font-size:1.1rem;cursor:pointer;transition:opacity 0.15s;}
 .btn-novo:active{opacity:0.8;}
 #ib{display:none;background:#0a1f12;border:1px solid var(--grn);border-radius:10px;padding:8px 12px;align-items:center;gap:8px;font-size:0.75rem;color:var(--t2);}
 #ib.show{display:flex;}
 #ib span{flex:1;line-height:1.4;}
 #ib strong{color:var(--grn);}
-.ib-y{background:var(--grn);color:#000;font-family:'Fredoka',sans-serif;font-size:0.75rem;border:none;border-radius:6px;padding:5px 9px;cursor:pointer;white-space:nowrap;}
+.ib-y{background:var(--grn);color:#000;font-family:'Lilita One',cursive;font-size:0.75rem;border:none;border-radius:6px;padding:5px 9px;cursor:pointer;white-space:nowrap;}
 .ib-n{background:transparent;color:var(--t3);border:none;font-size:0.9rem;cursor:pointer;padding:3px;}
 .hidden{display:none!important;}
 </style>
@@ -220,10 +240,10 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
         </div>
         <button class="btn-start" id="btn-start">Iniciar Jejum</button>
         <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
-          <span style="font-family:'Roboto Mono',monospace;font-size:0.62rem;color:var(--t3);letter-spacing:1px;">← Comecei às</span>
-          <input type="time" id="retro-time" onchange="onRetroChange()" style="background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--grn);font-family:'Fredoka',sans-serif;font-size:0.95rem;outline:none;padding:2px 4px;cursor:pointer;">
+          <span style="font-family:'Roboto Mono',monospace;font-size:0.62rem;color:var(--t3);">← Comecei às</span>
+          <input type="time" id="retro-time" onchange="onRetroChange()" style="background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--grn);font-family:'Lilita One',cursive;font-size:0.95rem;outline:none;padding:2px 4px;cursor:pointer;">
         </div>
-        <div id="retro-preview" style="text-align:center;font-family:'Roboto Mono',monospace;font-size:0.6rem;color:var(--grn);letter-spacing:1px;min-height:14px;"></div>
+        <div id="retro-preview" style="text-align:center;font-family:'Roboto Mono',monospace;font-size:0.6rem;color:var(--grn);min-height:14px;"></div>
       </div>
     </div>
     <div id="sc-ativo" class="hidden" style="display:flex;flex-direction:column;gap:10px;">
@@ -323,119 +343,117 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
   </div>
 </div>
 <script>
-// ══ DADOS CIENTÍFICOS ════════════════════════════════
-const EVENTOS=[
+var EVENTOS=[
   {h:0,icon:'🍽️',titulo:'Jejum Iniciado',desc:'Insulina elevada. Glicose da última refeição sendo processada. mTOR ativo — fase anabólica. O fígado armazena glicose como glicogênio para uso posterior.',cor:'#10b981'},
   {h:2,icon:'⬇️',titulo:'Insulina em Queda',desc:'Insulina cai 40-60% em 2h. Glucagon sobe em resposta — mobiliza glicogênio hepático. A cada 10 pontos de queda da insulina, a lipólise aumenta 20% (NEJM, 2019).',cor:'#10b981'},
   {h:4,icon:'🔄',titulo:'Glicogênio Mobilizado',desc:'Reservas de glicogênio do fígado (~100g) e músculos (~300-500g) em uso. AMPK começa a ser fosforilada — sinaliza déficit energético para as células (Frontiers, 2025).',cor:'#10b981'},
   {h:6,icon:'🧹',titulo:'Autofagia Ativada',desc:'AMPK inibe mTOR — ativa autofagia via LC3-II e Beclin-1. Proteínas danificadas e organelas velhas são recicladas. Genes ATG5 e LAMP2 upregulados (Clinical Nutrition ESPEN, 2025).',cor:'#34d399'},
   {h:8,icon:'🔥',titulo:'Queima de Gordura Intensa',desc:'Glicogênio hepático esgotado. Lipase hormônio-sensível ativada — ácidos graxos livres (AGL) entram na circulação. Oxidação de gordura aumenta 80-100% em relação ao estado alimentado (Endocrine Reviews, 2025).',cor:'#34d399'},
-  {h:10,icon:'🌿',titulo:'Metabolic Switch',desc:'Fígado converte AGL em acetoacetato e β-hidroxibutirato (BHB). O "metabolic switch" — mudança de glicose para cetonas como combustível primário — está em curso (NEJM, 2019).',cor:'#34d399'},
+  {h:10,icon:'🌿',titulo:'Metabolic Switch',desc:'Fígado converte AGL em acetoacetato e β-hidroxibutirato (BHB). O metabolic switch — mudança de glicose para cetonas como combustível primário — está em curso (NEJM, 2019).',cor:'#34d399'},
   {h:12,icon:'🌊',titulo:'Cetose Leve',desc:'BHB detectável no sangue (0.1-0.5 mmol/L). Cérebro começa a usar cetonas — 40% mais eficiente que glicose em energia por mol de oxigênio. Clareza mental e foco aumentam (Nutrients, 2024).',cor:'#3b82f6'},
-  {h:14,icon:'💡',titulo:'Neuroproteção Ativa',desc:'BHB cruza a barreira hematoencefálica — ativa BDNF (fator neurotrófico derivado do cérebro). BDNF promove plasticidade sináptica e neuroproteção. Cognição aprimorada (Journal of Physiology, 2025).',cor:'#3b82f6'},
-  {h:16,icon:'🏆',titulo:'Marco 16:8 — Ponto Ideal',desc:'Protocolo TRE (Time-Restricted Eating) 16:8 completo. Autofagia ativa, lipólise intensa, GH pulsátil elevado. Estudo com 5.000+ participantes confirma: 16h é o ponto de benefício máximo para a maioria (Journal Umm Al-Qura, 2025).',cor:'#f59e0b'},
-  {h:18,icon:'🦾',titulo:'GH 5x Elevado',desc:'Hormônio do crescimento (GH) pode aumentar 5x durante jejum prolongado — protege massa muscular via IGF-1 e inibe proteólise muscular. Importante: jejum curto NÃO causa perda muscular se proteína for adequada (Clinical Nutrition, 2024).',cor:'#f59e0b'},
-  {h:20,icon:'⚡',titulo:'Cetose Profunda',desc:'BHB atinge 0.5-3.0 mmol/L — cetose nutricional estabelecida. Inflamação sistêmica cai — IL-6, TNF-α e PCR reduzidos. Estado metabólico anti-inflamatório ativo (Nature Metabolism, 2024).',cor:'#f59e0b'},
-  {h:24,icon:'🔬',titulo:'Autofagia em Pico',desc:'Autofagia acelera significativamente — clearance de proteínas danificadas e mitocôndrias disfuncionais (mitofagia). Estudo 2025 com humanos confirma: 24h de jejum aumenta flux autofágico mensurável em PBMCs (J Physiology, 2025).',cor:'#f59e0b'},
-  {h:36,icon:'🧠',titulo:'Reprogramação Metabólica',desc:'Mais de 1.000 proteínas remodeladas após 36h de jejum (Nature Metabolism, 2024). BDNF em pico — neuroproteção máxima. Sensibilidade à insulina em reset profundo — receptores GLUT4 upregulados.',cor:'#f59e0b'},
-  {h:48,icon:'🌱',titulo:'Renovação Celular Profunda',desc:'Autofagia em alta eficiência — células-tronco ativadas. Microbioma intestinal se diversifica. Inflamação sistêmica reduzida 30-40%. Estudo: jejum de 48h remodela o proteoma completo (Nature Metabolism, 2024).',cor:'#6ee7b7'},
-  {h:72,icon:'♻️',titulo:'Renovação Imunológica',desc:'Regeneração de células-tronco imunes potencial — leucócitos reciclados. AMPK em nível máximo — expressão de genes de longevidade (sirtuínas, FOXO) ativada. Apenas para experiência supervisionada (BodySpec, 2025).',cor:'#6ee7b7'},
+  {h:14,icon:'💡',titulo:'Neuroproteção Ativa',desc:'BHB cruza a barreira hematoencefálica — ativa BDNF. BDNF promove plasticidade sináptica e neuroproteção. Cognição aprimorada (Journal of Physiology, 2025).',cor:'#3b82f6'},
+  {h:16,icon:'🏆',titulo:'Marco 16:8 — Ponto Ideal',desc:'Protocolo TRE 16:8 completo. Autofagia ativa, lipólise intensa, GH pulsátil elevado. Estudo com 5.000+ participantes confirma: 16h é o ponto de benefício máximo para a maioria (Journal Umm Al-Qura, 2025).',cor:'#f59e0b'},
+  {h:18,icon:'🦾',titulo:'GH 5x Elevado',desc:'Hormônio do crescimento pode aumentar 5x durante jejum prolongado — protege massa muscular via IGF-1. Jejum curto NÃO causa perda muscular se proteína for adequada (Clinical Nutrition, 2024).',cor:'#f59e0b'},
+  {h:20,icon:'⚡',titulo:'Cetose Profunda',desc:'BHB atinge 0.5-3.0 mmol/L — cetose nutricional estabelecida. Inflamação sistêmica cai — IL-6, TNF-α e PCR reduzidos (Nature Metabolism, 2024).',cor:'#f59e0b'},
+  {h:24,icon:'🔬',titulo:'Autofagia em Pico',desc:'Autofagia acelera significativamente — clearance de proteínas danificadas e mitocôndrias disfuncionais. Estudo 2025 confirma: 24h de jejum aumenta flux autofágico mensurável em PBMCs (J Physiology, 2025).',cor:'#f59e0b'},
+  {h:36,icon:'🧠',titulo:'Reprogramação Metabólica',desc:'Mais de 1.000 proteínas remodeladas após 36h (Nature Metabolism, 2024). BDNF em pico — neuroproteção máxima. Sensibilidade à insulina em reset profundo.',cor:'#f59e0b'},
+  {h:48,icon:'🌱',titulo:'Renovação Celular Profunda',desc:'Autofagia em alta eficiência — células-tronco ativadas. Microbioma intestinal se diversifica. Inflamação sistêmica reduzida 30-40% (Nature Metabolism, 2024).',cor:'#6ee7b7'},
+  {h:72,icon:'♻️',titulo:'Renovação Imunológica',desc:'Regeneração de células-tronco imunes potencial — leucócitos reciclados. AMPK em nível máximo — genes de longevidade ativados. Apenas para experiência supervisionada (BodySpec, 2025).',cor:'#6ee7b7'},
 ];
 
-// ══ ESTADO ════════════════════════════════════════════
-const ST={running:false,startTime:null,goalHours:16,timerId:null,sessao:null};
+var ST={running:false,startTime:null,goalHours:16,timerId:null,sessao:null};
 
 function loadState(){
-  try{const s=JSON.parse(localStorage.getItem('jejum_v5'));if(s&&s.running&&s.startTime){ST.running=true;ST.startTime=s.startTime;ST.goalHours=s.goalHours||16;return true;}}catch(e){}return false;
+  try{var s=JSON.parse(localStorage.getItem('jejum_v5'));if(s&&s.running&&s.startTime){ST.running=true;ST.startTime=s.startTime;ST.goalHours=s.goalHours||16;return true;}}catch(e){}return false;
 }
 function saveState(){localStorage.setItem('jejum_v5',JSON.stringify({running:ST.running,startTime:ST.startTime,goalHours:ST.goalHours}));}
 
 // ══ DNA ══════════════════════════════════════════════
 function initDNA(){
-  const canvas=document.getElementById('dna-canvas');if(!canvas)return;
-  const ctx=canvas.getContext('2d');let W,H,t=0;
+  var canvas=document.getElementById('dna-canvas');if(!canvas)return;
+  var ctx=canvas.getContext('2d');var W,H,t=0;
   function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
   resize();window.addEventListener('resize',resize);
-  const frags=[];
-  for(let i=0;i<12;i++)frags.push({x:Math.random()*1400,y:Math.random()*2400,vx:(Math.random()-0.5)*0.18,vy:(Math.random()-0.5)*0.15,rot:Math.random()*Math.PI*2,vrot:(Math.random()-0.5)*0.003,scale:0.5+Math.random()*0.8,alpha:0.04+Math.random()*0.07,pulse:Math.random()*Math.PI*2,pulseSpeed:0.005+Math.random()*0.008,len:40+Math.random()*50});
+  var frags=[];
+  for(var i=0;i<12;i++)frags.push({x:Math.random()*1400,y:Math.random()*2400,vx:(Math.random()-0.5)*0.18,vy:(Math.random()-0.5)*0.15,rot:Math.random()*Math.PI*2,vrot:(Math.random()-0.5)*0.003,scale:0.5+Math.random()*0.8,alpha:0.04+Math.random()*0.07,pulse:Math.random()*Math.PI*2,pulseSpeed:0.005+Math.random()*0.008,len:40+Math.random()*50});
   function drawFragment(f){
-    const{x,y,rot,scale,len}=f;const freq=0.18;const amp=6*scale;const steps=Math.ceil(len/3);const alpha=f.alpha*(0.7+Math.sin(f.pulse)*0.3);
-    ctx.save();ctx.translate(x,y);ctx.rotate(rot);
-    ctx.beginPath();for(let i=0;i<=steps;i++){const py=(i/steps)*len-len/2;const px=Math.sin(i*freq*3)*amp;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
-    ctx.strokeStyle=`rgba(16,185,129,${alpha*1.4})`;ctx.lineWidth=1.2*scale;ctx.stroke();
-    ctx.beginPath();for(let i=0;i<=steps;i++){const py=(i/steps)*len-len/2;const px=Math.sin(i*freq*3+Math.PI)*amp;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
-    ctx.strokeStyle=`rgba(16,185,129,${alpha*0.8})`;ctx.lineWidth=0.9*scale;ctx.stroke();
-    const bridgeStep=Math.PI/freq/3;
-    for(let i=0;i<=steps;i+=Math.max(1,Math.floor(bridgeStep))){const py=(i/steps)*len-len/2;const px1=Math.sin(i*freq*3)*amp;const px2=Math.sin(i*freq*3+Math.PI)*amp;const ba=alpha*0.5+Math.abs(Math.sin(i*0.5+t))*alpha*0.4;ctx.beginPath();ctx.moveTo(px1,py);ctx.lineTo(px2,py);ctx.strokeStyle=`rgba(52,211,153,${ba})`;ctx.lineWidth=0.7*scale;ctx.stroke();}
+    var px=f.x,py=f.y,rot=f.rot,scale=f.scale,len=f.len;
+    var freq=0.18,amp=6*scale,steps=Math.ceil(len/3);
+    var alpha=f.alpha*(0.7+Math.sin(f.pulse)*0.3);
+    ctx.save();ctx.translate(px,py);ctx.rotate(rot);
+    ctx.beginPath();
+    for(var i=0;i<=steps;i++){var y=(i/steps)*len-len/2;var x=Math.sin(i*freq*3)*amp;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    ctx.strokeStyle='rgba(16,185,129,'+(alpha*1.4)+')';ctx.lineWidth=1.2*scale;ctx.stroke();
+    ctx.beginPath();
+    for(var i=0;i<=steps;i++){var y=(i/steps)*len-len/2;var x=Math.sin(i*freq*3+Math.PI)*amp;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    ctx.strokeStyle='rgba(16,185,129,'+(alpha*0.8)+')';ctx.lineWidth=0.9*scale;ctx.stroke();
+    var bridgeStep=Math.PI/freq/3;
+    for(var i=0;i<=steps;i+=Math.max(1,Math.floor(bridgeStep))){var y=(i/steps)*len-len/2;var px1=Math.sin(i*freq*3)*amp;var px2=Math.sin(i*freq*3+Math.PI)*amp;var ba=alpha*0.5+Math.abs(Math.sin(i*0.5+t))*alpha*0.4;ctx.beginPath();ctx.moveTo(px1,y);ctx.lineTo(px2,y);ctx.strokeStyle='rgba(52,211,153,'+ba+')';ctx.lineWidth=0.7*scale;ctx.stroke();}
     ctx.restore();
   }
-  function getCardRects(){const rects=[];document.querySelectorAll('.card,.body-card,.circle-section,.hdr').forEach(el=>{const r=el.getBoundingClientRect();if(r.width>0&&r.height>0)rects.push(r);});return rects;}
-  function inCard(px,py,rects){for(const r of rects){if(px>r.left-20&&px<r.right+20&&py>r.top-20&&py<r.bottom+20)return true;}return false;}
-  function draw(){ctx.clearRect(0,0,W,H);const rects=getCardRects();t+=0.008;frags.forEach(f=>{f.x+=f.vx;f.y+=f.vy;f.rot+=f.vrot;f.pulse+=f.pulseSpeed;if(f.x<-80)f.x=W+80;if(f.x>W+80)f.x=-80;if(f.y<-80)f.y=H+80;if(f.y>H+80)f.y=-80;if(!inCard(f.x,f.y,rects))drawFragment(f);});requestAnimationFrame(draw);}
+  function getCardRects(){var rects=[];document.querySelectorAll('.card,.body-card,.circle-section,.hdr').forEach(function(el){var r=el.getBoundingClientRect();if(r.width>0&&r.height>0)rects.push(r);});return rects;}
+  function inCard(px,py,rects){for(var i=0;i<rects.length;i++){var r=rects[i];if(px>r.left-20&&px<r.right+20&&py>r.top-20&&py<r.bottom+20)return true;}return false;}
+  function draw(){ctx.clearRect(0,0,W,H);var rects=getCardRects();t+=0.008;frags.forEach(function(f){f.x+=f.vx;f.y+=f.vy;f.rot+=f.vrot;f.pulse+=f.pulseSpeed;if(f.x<-80)f.x=W+80;if(f.x>W+80)f.x=-80;if(f.y<-80)f.y=H+80;if(f.y>H+80)f.y=-80;if(!inCard(f.x,f.y,rects))drawFragment(f);});requestAnimationFrame(draw);}
   draw();
 }
 
 // ══ ANEL ═════════════════════════════════════════════
-let RING={ctx:null,W:0,H:0,t:0,pct:0,target:0,cor:'#10b981',ativo:false};
+var RING={ctx:null,W:0,H:0,t:0,pct:0,target:0,cor:'#10b981',ativo:false};
+
 function initRing(){
-  const canvas=document.getElementById('ring-canvas');if(!canvas)return;
-  const wrap=canvas.closest('.circle-wrap');if(!wrap)return;
+  if(RING.ativo)return; // FIX: guard contra dupla inicialização
+  var canvas=document.getElementById('ring-canvas');if(!canvas)return;
+  var wrap=canvas.closest('.circle-wrap');if(!wrap)return;
   RING.ctx=canvas.getContext('2d');
-  function resize(){const sz=wrap.offsetWidth;if(sz>0){canvas.width=sz;canvas.height=sz;RING.W=sz;RING.H=sz;}}
-  resize();new ResizeObserver(resize).observe(wrap);RING.ativo=true;drawRing();
+  function resize(){var sz=wrap.offsetWidth;if(sz>0){canvas.width=sz;canvas.height=sz;RING.W=sz;RING.H=sz;}}
+  resize();
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(resize).observe(wrap);
+  RING.ativo=true;drawRing();
 }
 function setRingPct(pct,elapsedH){RING.target=Math.max(0,Math.min(1,pct));if(elapsedH>=24)RING.cor='#f59e0b';else if(elapsedH>=16)RING.cor='#34d399';else RING.cor='#10b981';}
 function drawRing(){
   if(!RING.ativo||!RING.ctx){requestAnimationFrame(drawRing);return;}
-  const sz=RING.W;if(sz<4){requestAnimationFrame(drawRing);return;}
-  const ctx=RING.ctx,cor=RING.cor;RING.t+=0.018;RING.pct+=(RING.target-RING.pct)*0.004;
-  ctx.clearRect(0,0,sz,sz);const cx=sz/2,cy=sz/2,r=sz/2-20,pct=RING.pct;
+  var sz=RING.W;if(sz<4){requestAnimationFrame(drawRing);return;}
+  var ctx=RING.ctx,cor=RING.cor;
+  RING.t+=0.018;
+  // FIX: lerp mais rápido — 0.04 em vez de 0.004
+  RING.pct+=(RING.target-RING.pct)*0.04;
+  ctx.clearRect(0,0,sz,sz);
+  var cx=sz/2,cy=sz/2,r=sz/2-20,pct=RING.pct;
   ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=18;ctx.stroke();
   if(pct>0.002){
-    const startAngle=-Math.PI/2,endAngle=startAngle+(Math.PI*2*pct),steps=Math.max(4,Math.floor(280*pct));
-    ctx.beginPath();ctx.arc(cx,cy,r,startAngle,endAngle);ctx.strokeStyle=cor+'18';ctx.lineWidth=38;ctx.lineCap='round';ctx.stroke();
-    ctx.beginPath();ctx.arc(cx,cy,r,startAngle,endAngle);ctx.strokeStyle=cor+'22';ctx.lineWidth=26;ctx.lineCap='round';ctx.stroke();
-    for(let i=0;i<steps;i++){
-      const prog=i/steps,angle=startAngle+(endAngle-startAngle)*prog,angleNext=startAngle+(endAngle-startAngle)*((i+1)/steps);
-      const wave=Math.sin(prog*5+RING.t)*0.7+Math.sin(prog*9+RING.t*0.5)*0.4,lw=Math.max(4,17+wave);
-      const rBreath=r+Math.sin(prog*3+RING.t*0.7)*0.7+Math.sin(prog*7+RING.t*0.3)*0.3;
-      const x1=cx+Math.cos(angle)*rBreath,y1=cy+Math.sin(angle)*rBreath,x2=cx+Math.cos(angleNext)*rBreath,y2=cy+Math.sin(angleNext)*rBreath;
-      const alpha=0.85+Math.sin(prog*6+RING.t)*0.15,hex=Math.floor(alpha*255).toString(16).padStart(2,'0');
-      ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=cor+hex;ctx.lineWidth=lw;ctx.lineCap='round';ctx.stroke();
-    }
-    const tipX=cx+Math.cos(endAngle)*r,tipY=cy+Math.sin(endAngle)*r,tipSz=9+Math.sin(RING.t*1.5)*2;
-    const gr=ctx.createRadialGradient(tipX,tipY,0,tipX,tipY,tipSz);
-    gr.addColorStop(0,'rgba(255,255,255,0.95)');gr.addColorStop(0.4,cor+'cc');gr.addColorStop(1,cor+'00');
-    ctx.beginPath();ctx.arc(tipX,tipY,tipSz,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
+    var startAngle=-Math.PI/2,endAngle=startAngle+(Math.PI*2*pct);
+    ctx.beginPath();ctx.arc(cx,cy,r,startAngle,endAngle);
+    ctx.strokeStyle=cor;ctx.lineWidth=18;ctx.lineCap='round';ctx.stroke();
   }
   requestAnimationFrame(drawRing);
 }
 
 // ══ RETROATIVO ═══════════════════════════════════════
 function onRetroChange(){
-  const val=document.getElementById('retro-time').value;
-  const prev=document.getElementById('retro-preview');
+  var val=document.getElementById('retro-time').value;
+  var prev=document.getElementById('retro-preview');
   if(!val){prev.textContent='';return;}
-  const [hh,mm]=val.split(':').map(Number);
-  const start=new Date();start.setHours(hh,mm,0,0);
+  var parts=val.split(':');var hh=parseInt(parts[0]),mm=parseInt(parts[1]);
+  var start=new Date();start.setHours(hh,mm,0,0);
   if(start.getTime()>Date.now())start.setDate(start.getDate()-1);
-  const diffMs=Date.now()-start.getTime();
-  const diffH=Math.floor(diffMs/3600000),diffM=Math.floor((diffMs%3600000)/60000);
-  prev.textContent=`✅ ${diffH}h ${diffM}min já completado`;prev.style.color='var(--grn)';
+  var diffMs=Date.now()-start.getTime();
+  var diffH=Math.floor(diffMs/3600000),diffM=Math.floor((diffMs%3600000)/60000);
+  prev.textContent='✅ '+diffH+'h '+diffM+'min já completado';
 }
 function getStartTime(){
-  const val=document.getElementById('retro-time').value;
+  var val=document.getElementById('retro-time').value;
   if(!val)return Date.now();
-  const [hh,mm]=val.split(':').map(Number);
-  const start=new Date();start.setHours(hh,mm,0,0);
+  var parts=val.split(':');var hh=parseInt(parts[0]),mm=parseInt(parts[1]);
+  var start=new Date();start.setHours(hh,mm,0,0);
   if(start.getTime()>Date.now())start.setDate(start.getDate()-1);
   return start.getTime();
 }
 
 // ══ NAVEGAÇÃO ════════════════════════════════════════
 function showScreen(id){
-  ['sc-home','sc-ativo','sc-relatorio'].forEach(s=>{
-    const el=document.getElementById(s);if(!el)return;
+  ['sc-home','sc-ativo','sc-relatorio'].forEach(function(s){
+    var el=document.getElementById(s);if(!el)return;
     if(s===id){el.classList.remove('hidden');el.style.display='flex';el.style.flexDirection='column';}
     else{el.classList.add('hidden');el.style.display='none';}
   });
@@ -444,17 +462,19 @@ function showScreen(id){
 }
 
 // ══ INICIAR ══════════════════════════════════════════
-document.getElementById('btn-start').addEventListener('click',()=>{
-  const h=parseInt(document.getElementById('dur-input').value);
+document.getElementById('btn-start').addEventListener('click',function(){
+  var h=parseInt(document.getElementById('dur-input').value);
   if(isNaN(h)||h<1){alert('Informe uma duração válida.');return;}
   ST.goalHours=h;ST.startTime=getStartTime();ST.running=true;saveState();
-  showScreen('sc-ativo');updateBodyCard(0);
+  showScreen('sc-ativo');
+  initRing(); // FIX: initRing após showScreen (canvas visível)
+  updateBodyCard(0);
   if(ST.timerId)clearInterval(ST.timerId);
   ST.timerId=setInterval(tick,1000);tick();
 });
 
 // ══ VOLTAR ═══════════════════════════════════════════
-document.getElementById('btn-voltar').addEventListener('click',()=>{
+document.getElementById('btn-voltar').addEventListener('click',function(){
   if(!confirm('Voltar à tela inicial? O jejum continua ativo.'))return;
   showScreen('sc-home');
 });
@@ -462,36 +482,36 @@ document.getElementById('btn-voltar').addEventListener('click',()=>{
 // ══ TICK ═════════════════════════════════════════════
 function tick(){
   if(!ST.running||!ST.startTime)return;
-  const now=Date.now(),eMs=Math.max(0,now-ST.startTime),eSec=Math.floor(eMs/1000),goalSec=ST.goalHours*3600;
-  const pct=Math.min(eMs/(goalSec*1000),1),elapsedH=eMs/3600000;
-  const h=Math.floor(eSec/3600),m=Math.floor((eSec%3600)/60),s=eSec%60;
-  const el=document.getElementById('liq-time');if(el)el.textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-  const elPct=document.getElementById('liq-pct');if(elPct)elPct.textContent=Math.floor(pct*100)+'%';
+  var now=Date.now(),eMs=Math.max(0,now-ST.startTime),eSec=Math.floor(eMs/1000),goalSec=ST.goalHours*3600;
+  var pct=Math.min(eMs/(goalSec*1000),1),elapsedH=eMs/3600000;
+  var h=Math.floor(eSec/3600),m=Math.floor((eSec%3600)/60),s=eSec%60;
+  var el=document.getElementById('liq-time');if(el)el.textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  var elPct=document.getElementById('liq-pct');if(elPct)elPct.textContent=Math.floor(pct*100)+'%';
   setRingPct(pct,elapsedH);
-  const rSec=Math.max(goalSec-eSec,0),rh=Math.floor(rSec/3600),rm=Math.floor((rSec%3600)/60);
-  const sRest=document.getElementById('s-rest');if(sRest)sRest.textContent=String(rh).padStart(2,'0')+':'+String(rm).padStart(2,'0');
-  const sMeta=document.getElementById('s-meta');if(sMeta)sMeta.textContent=ST.goalHours+'h';
-  const end=new Date(ST.startTime+goalSec*1000);
-  const sTerm=document.getElementById('s-term');if(sTerm)sTerm.textContent=String(end.getHours()).padStart(2,'0')+':'+String(end.getMinutes()).padStart(2,'0');
+  var rSec=Math.max(goalSec-eSec,0),rh=Math.floor(rSec/3600),rm=Math.floor((rSec%3600)/60);
+  var sRest=document.getElementById('s-rest');if(sRest)sRest.textContent=String(rh).padStart(2,'0')+':'+String(rm).padStart(2,'0');
+  var sMeta=document.getElementById('s-meta');if(sMeta)sMeta.textContent=ST.goalHours+'h';
+  var end=new Date(ST.startTime+goalSec*1000);
+  var sTerm=document.getElementById('s-term');if(sTerm)sTerm.textContent=String(end.getHours()).padStart(2,'0')+':'+String(end.getMinutes()).padStart(2,'0');
   updateBodyCard(elapsedH);
 }
 
 // ══ CARD CORPO ═══════════════════════════════════════
 function updateBodyCard(elapsedH){
-  let cur=EVENTOS[0],curIdx=0;
-  for(let i=0;i<EVENTOS.length;i++){if(elapsedH>=EVENTOS[i].h){cur=EVENTOS[i];curIdx=i;}}
-  const next=EVENTOS[curIdx+1]||null;
-  const elIcon=document.getElementById('body-icon'),elTit=document.getElementById('body-title');
-  const elHora=document.getElementById('body-hora'),elDesc=document.getElementById('body-desc');
-  const elProg=document.getElementById('body-prog-fill'),elNext=document.getElementById('body-next-val');
+  var cur=EVENTOS[0],curIdx=0;
+  for(var i=0;i<EVENTOS.length;i++){if(elapsedH>=EVENTOS[i].h){cur=EVENTOS[i];curIdx=i;}}
+  var next=EVENTOS[curIdx+1]||null;
+  var elIcon=document.getElementById('body-icon'),elTit=document.getElementById('body-title');
+  var elHora=document.getElementById('body-hora'),elDesc=document.getElementById('body-desc');
+  var elProg=document.getElementById('body-prog-fill'),elNext=document.getElementById('body-next-val');
   if(elIcon)elIcon.textContent=cur.icon;
   if(elTit){elTit.textContent=cur.titulo;elTit.style.color=cur.cor;}
   if(elHora)elHora.textContent='Marco atual: '+cur.h+'h';
   if(elDesc)elDesc.textContent=cur.desc;
   if(next&&elProg){
-    const prog=((elapsedH-cur.h)/(next.h-cur.h))*100;
+    var prog=((elapsedH-cur.h)/(next.h-cur.h))*100;
     elProg.style.width=Math.min(Math.max(prog,0),100)+'%';
-    const diff=next.h-elapsedH,dh=Math.floor(diff),dm=Math.floor((diff-dh)*60);
+    var diff=next.h-elapsedH,dh=Math.floor(diff),dm=Math.floor((diff-dh)*60);
     if(elNext)elNext.textContent=next.icon+' '+next.titulo+' — em '+dh+'h'+(dm>0?' '+dm+'min':'');
   } else {
     if(elProg)elProg.style.width='100%';
@@ -500,53 +520,55 @@ function updateBodyCard(elapsedH){
 }
 
 // ══ ENCERRAR ═════════════════════════════════════════
-document.getElementById('btn-stop').addEventListener('click',()=>{
+document.getElementById('btn-stop').addEventListener('click',function(){
   if(!confirm('Encerrar o jejum agora?'))return;
   clearInterval(ST.timerId);
-  const now=Date.now(),eMs=Math.max(0,now-ST.startTime),durH=eMs/3600000;
-  const sessao={start:ST.startTime,end:now,durH:Math.round(durH*10)/10,goalH:ST.goalHours,date:now};
+  var now=Date.now(),eMs=Math.max(0,now-ST.startTime),durH=eMs/3600000;
+  var sessao={start:ST.startTime,end:now,durH:Math.round(durH*10)/10,goalH:ST.goalHours,date:now};
   ST.sessao=sessao;salvarJejum(sessao);ST.running=false;ST.startTime=null;saveState();
   buildRelatorio(sessao);showScreen('sc-relatorio');
 });
 
 // ══ RELATÓRIO ════════════════════════════════════════
 function buildRelatorio(sessao){
-  const{durH,goalH,start,end}=sessao,completed=durH>=goalH;
-  const d=new Date(end);
-  const rep=document.getElementById('rep-date');
+  var durH=sessao.durH,goalH=sessao.goalH,end=sessao.end;
+  var completed=durH>=goalH;
+  var d=new Date(end);
+  var rep=document.getElementById('rep-date');
   if(rep)rep.textContent=d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).toUpperCase()+' · '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-  const repDur=document.getElementById('rep-dur');
-  if(repDur){const h=Math.floor(durH),m=Math.round((durH-h)*60);repDur.textContent=(h>0?h+'h ':'')+m+'min';}
-  const badge=document.getElementById('rep-badge-txt');
+  var repDur=document.getElementById('rep-dur');
+  if(repDur){var h=Math.floor(durH),m=Math.round((durH-h)*60);repDur.textContent=(h>0?h+'h ':'')+m+'min';}
+  var badge=document.getElementById('rep-badge-txt');
   if(badge){if(completed){badge.textContent='✅ Meta atingida';badge.style.color='var(--grn)';}else{badge.textContent='⏸️ Jejum parcial';badge.style.color='var(--org)';}}
-  const rsMeta=document.getElementById('rs-meta');if(rsMeta)rsMeta.textContent=goalH+'h';
-  const rsPct=document.getElementById('rs-pct');if(rsPct)rsPct.textContent=Math.round(Math.min(durH/goalH,1)*100)+'%';
-  let faseF=EVENTOS[0];EVENTOS.forEach(ev=>{if(durH>=ev.h)faseF=ev;});
-  const rsFase=document.getElementById('rs-fase');if(rsFase)rsFase.textContent=faseF.icon;
+  var rsMeta=document.getElementById('rs-meta');if(rsMeta)rsMeta.textContent=goalH+'h';
+  var rsPct=document.getElementById('rs-pct');if(rsPct)rsPct.textContent=Math.round(Math.min(durH/goalH,1)*100)+'%';
+  var faseF=EVENTOS[0];EVENTOS.forEach(function(ev){if(durH>=ev.h)faseF=ev;});
+  var rsFase=document.getElementById('rs-fase');if(rsFase)rsFase.textContent=faseF.icon;
   buildHipo(durH,goalH);buildFases(durH);
   renderCalendar();renderHistorico();renderStats();
   generateAI(sessao);
 }
 
 function buildHipo(durH,goalH){
-  const strip=document.getElementById('hipo-strip'),axis=document.getElementById('hipo-axis');
+  var strip=document.getElementById('hipo-strip'),axis=document.getElementById('hipo-axis');
   if(!strip||!axis)return;
   strip.innerHTML='';axis.innerHTML='';
-  const total=Math.max(Math.ceil(durH),Math.ceil(goalH),1);
-  for(let i=0;i<=total;i++){
-    const seg=document.createElement('div');seg.className='hipo-seg';
+  var total=Math.max(Math.ceil(durH),Math.ceil(goalH),1);
+  for(var i=0;i<=total;i++){
+    var seg=document.createElement('div');seg.className='hipo-seg';
     if(i<=durH){if(i>=24)seg.style.background='#f59e0b';else if(i>=16)seg.style.background='#f59e0b88';else if(i>=12)seg.style.background='#3b82f6';else if(i>=8)seg.style.background='#34d399';else seg.style.background='#10b981';}
     else seg.style.background='var(--s3)';
     if(i===Math.floor(goalH))seg.style.boxShadow='2px 0 0 rgba(255,255,255,0.3)';
     strip.appendChild(seg);
   }
-  const marks=[0,Math.round(total*0.25),Math.round(total*0.5),Math.round(total*0.75),total];
-  marks.forEach(m=>{const sp=document.createElement('span');sp.textContent=m+'h';axis.appendChild(sp);});
+  var marks=[0,Math.round(total*0.25),Math.round(total*0.5),Math.round(total*0.75),total];
+  marks.forEach(function(m){var sp=document.createElement('span');sp.textContent=m+'h';axis.appendChild(sp);});
 }
 
+// FIX: concatenação pura no innerHTML
 function buildFases(durH){
-  const lista=document.getElementById('fases-list');if(!lista)return;lista.innerHTML='';
-  const fasesChave=[
+  var lista=document.getElementById('fases-list');if(!lista)return;lista.innerHTML='';
+  var fasesChave=[
     {h:8,icon:'🔥',nome:'Queima de Gordura',desc:'Lipólise ativa — AGL como combustível primário'},
     {h:12,icon:'🌊',nome:'Cetose Leve',desc:'BHB detectável — energia cerebral otimizada'},
     {h:16,icon:'🏆',nome:'Marco 16:8',desc:'Protocolo TRE ideal completo'},
@@ -554,211 +576,212 @@ function buildFases(durH){
     {h:48,icon:'🌱',nome:'Renovação Celular',desc:'1.000+ proteínas remodeladas'},
     {h:72,icon:'♻️',nome:'Renovação Imune',desc:'Regeneração de células-tronco imunes'},
   ];
-  fasesChave.forEach(f=>{
-    const ok=durH>=f.h,div=document.createElement('div');div.className='fase-item '+(ok?'fase-ok':'fase-no');
-    div.innerHTML=`<div class="fase-icon">${f.icon}</div><div class="fase-info"><div class="fase-nome">${f.nome}</div><div class="fase-desc">${f.desc}</div></div><div class="fase-h">${f.h}h</div>`;
+  fasesChave.forEach(function(f){
+    var ok=durH>=f.h;
+    var div=document.createElement('div');
+    div.className='fase-item '+(ok?'fase-ok':'fase-no');
+    div.innerHTML='<div class="fase-icon">'+f.icon+'</div>'+
+      '<div class="fase-info"><div class="fase-nome">'+f.nome+'</div><div class="fase-desc">'+f.desc+'</div></div>'+
+      '<div class="fase-h">'+f.h+'h</div>';
     lista.appendChild(div);
   });
 }
 
-// ══════════════════════════════════════════════════════
-// IA CIENTÍFICA OFFLINE — v2.0
-// Base de conhecimento: NEJM 2019, Nature Metabolism 2024,
-// J Physiology 2025, Endocrine Reviews 2025, Clinical Nutrition 2024,
-// Frontiers 2025, Journal Umm Al-Qura 2025, BodySpec 2025
-// Cruzamento de variáveis: duração, histórico, perfil de trabalhador
-// noturno físico pesado (turno 2x2, 63kg massa muscular)
-// ══════════════════════════════════════════════════════
+// ══ IA ════════════════════════════════════════════════
 function generateAI(sessao){
-  const body=document.getElementById('ai-body');if(!body)return;
+  var body=document.getElementById('ai-body');if(!body)return;
   body.innerHTML='<div class="ai-load"><div class="ai-dots"><span></span><span></span><span></span></div> Cruzando marcadores metabólicos...</div>';
-  const{durH,goalH}=sessao;
-  const jejuns=loadJejuns();
-  const completed=durH>=goalH;
-  const pctMeta=Math.round(Math.min(durH/goalH,1)*100);
-  const total=jejuns.length;
-  const recentes=jejuns.slice(0,7);
-  const mediaDur=recentes.length>1?recentes.reduce((a,x)=>a+x.durH,0)/recentes.length:0;
-  const streak=calcStreak(jejuns);
-
-  setTimeout(()=>{
-    let txt='';
-
-    // ── BLOCO 1: Diagnóstico metabólico baseado na duração ──
-    if(durH<8){
-      txt+='Seu organismo percorreu as fases iniciais do jejum: insulina em queda progressiva, glicogênio hepático sendo mobilizado, AMPK começando a ser ativada. Embora a autofagia ainda não tenha atingido intensidade clínica relevante, esta janela já melhora a sensibilidade à insulina e reduz a carga metabólica pós-prandial. ';
-    } else if(durH<12){
-      txt+='O eixo AMPK-mTOR foi invertido com sucesso: mTOR inibido, autofagia iniciada via LC3-II e Beclin-1. A beta-oxidação de ácidos graxos está fornecendo até 80% do combustível hepático. Genes ATG5 e LAMP2 upregulados — reciclagem celular ativa. Para trabalhadores de turno noturno, o meta-análise de Koh et al. (Nutrients, 2025 — RCT multicêntrico) confirma que este intervalo melhora a sensibilidade à insulina independentemente de restrição calórica. ';
-    } else if(durH<16){
-      txt+='Cetose leve estabelecida — β-hidroxibutirato detectável entre 0,1 e 0,5 mmol/L. O metabolic switch está completo: o cérebro já utiliza cetonas como combustível alternativo, o que explica o aumento de foco e clareza mental relatado clinicamente. O fator BDNF está em ascensão, promovendo plasticidade sináptica. O primeiro RCT a confirmar aumento do fluxo autofágico diretamente em humanos via jejum intermitente foi publicado em 2025 (Bensalem et al., J Physiol — Adelaide, Austrália). ';
-    } else if(durH<24){
-      txt+='Protocolo TRE 16:8 concluído com sucesso. Conforme metanálise com 5.000+ participantes (Journal Umm Al-Qura, 2025), este é o ponto de benefício máximo para a maioria das pessoas: autofagia ativa, queima de gordura intensa, GH pulsátil elevado. O GH pode chegar a 5x os valores basais, protegendo sua massa muscular via IGF-1. ';
-    } else if(durH<48){
-      txt+='Autofagia em nível clínico mensurável — estudo de 2025 no Journal of Physiology confirmou aumento do flux autofágico em células mononucleares do sangue periférico após 24h de jejum em humanos. Mais de 800 proteínas remodeladas. A cetose profunda (BHB 0,5-3,0 mmol/L) exerce efeito anti-inflamatório sistêmico, com redução de IL-6 e TNF-α (Nature Metabolism, 2024). ';
-    } else {
-      txt+='Você atingiu o nível de renovação celular profunda. Nature Metabolism 2024 documentou remodelagem de mais de 1.000 proteínas após jejum prolongado. Células-tronco do sistema imune potencialmente ativadas. Este nível exige supervisão e reposição cuidadosa de eletrólitos — sódio, potássio e magnésio são críticos nesta fase. ';
-    }
-
-    // ── BLOCO 2: Contexto de trabalhador físico pesado ──
-    if(durH>=16){
-      txt+='Ponto crítico para seu perfil: com 63kg de massa muscular e trabalho físico pesado em turno noturno, o risco de catabolismo muscular existe se a proteína não for adequada. Bonham et al. (eBioMedicine, 2025 — único RCT com trabalhadores noturnos) documenta que o jejum modificado supera restrição calórica para perda de peso nessa população. Assegure ≥ 40g de proteína completa na primeira refeição da janela. Priorize uma refeição de quebra de jejum com 40-50g de proteína completa. ';
-    }
-
-    // ── BLOCO 3: Análise do histórico ──
+  var durH=sessao.durH,goalH=sessao.goalH;
+  var jejuns=loadJejuns();
+  var completed=durH>=goalH;
+  var pctMeta=Math.round(Math.min(durH/goalH,1)*100);
+  var total=jejuns.length;
+  var recentes=jejuns.slice(0,7);
+  var mediaDur=recentes.length>1?recentes.reduce(function(a,x){return a+x.durH;},0)/recentes.length:0;
+  var streak=calcStreak(jejuns);
+  setTimeout(function(){
+    var txt='';
+    if(durH<8){txt+='Seu organismo percorreu as fases iniciais do jejum: insulina em queda progressiva, glicogênio hepático sendo mobilizado, AMPK começando a ser ativada. Esta janela já melhora a sensibilidade à insulina e reduz a carga metabólica pós-prandial. ';}
+    else if(durH<12){txt+='O eixo AMPK-mTOR foi invertido com sucesso: mTOR inibido, autofagia iniciada via LC3-II e Beclin-1. A beta-oxidação de ácidos graxos está fornecendo até 80% do combustível hepático. Genes ATG5 e LAMP2 upregulados. Para trabalhadores de turno noturno, meta-análise (Nutrients, 2025) confirma que este intervalo melhora a sensibilidade à insulina independentemente de restrição calórica. ';}
+    else if(durH<16){txt+='Cetose leve estabelecida — BHB detectável entre 0,1 e 0,5 mmol/L. O metabolic switch está completo: o cérebro já utiliza cetonas como combustível alternativo, explicando o aumento de foco e clareza mental relatado clinicamente. BDNF em ascensão, promovendo plasticidade sináptica (Bensalem et al., J Physiol, 2025). ';}
+    else if(durH<24){txt+='Protocolo TRE 16:8 concluído com sucesso. Conforme metanálise com 5.000+ participantes (Journal Umm Al-Qura, 2025), este é o ponto de benefício máximo: autofagia ativa, queima de gordura intensa, GH pulsátil elevado podendo chegar a 5x os valores basais, protegendo sua massa muscular via IGF-1. ';}
+    else if(durH<48){txt+='Autofagia em nível clínico mensurável — estudo de 2025 no Journal of Physiology confirmou aumento do flux autofágico em células mononucleares após 24h em humanos. Mais de 800 proteínas remodeladas. Cetose profunda (BHB 0,5-3,0 mmol/L) com efeito anti-inflamatório sistêmico — redução de IL-6 e TNF-α (Nature Metabolism, 2024). ';}
+    else{txt+='Nível de renovação celular profunda atingido. Nature Metabolism 2024 documentou remodelagem de mais de 1.000 proteínas após jejum prolongado. Células-tronco do sistema imune potencialmente ativadas. Reposição de eletrólitos crítica: sódio, potássio e magnésio. ';}
+    if(durH>=16){txt+='Ponto crítico para seu perfil: com trabalho físico pesado em turno noturno, assegure mais de 40g de proteína completa na primeira refeição da janela alimentar para proteger massa muscular (Bonham et al., eBioMedicine, 2025). ';}
     if(total>=3&&mediaDur>0){
-      const mediaFmt=mediaDur.toFixed(1);
-      if(durH>=mediaDur*1.1){
-        txt+=`Excelente progressão: este jejum superou sua média histórica de ${mediaFmt}h. Consistência é a chave — pesquisas mostram que os benefícios da autofagia se acumulam com a regularidade semanal, não apenas com jejuns isolados longos. `;
-      } else if(durH<mediaDur*0.8){
-        txt+=`Jejum abaixo da sua média habitual de ${mediaFmt}h. Sem problema — o corpo se adapta. Priorize sono de qualidade e reposição proteica para o próximo ciclo. `;
-      } else {
-        txt+=`Desempenho consistente com sua média de ${mediaFmt}h. A regularidade é mais importante que a duração máxima. `;
-      }
-    } else if(total===1){
-      txt+='Primeiro jejum registrado. Parabéns pela decisão. Os maiores benefícios da autofagia e sensibilidade à insulina aparecem com a prática consistente ao longo de semanas. ';
-    }
-
-    // ── BLOCO 4: Status da meta ──
-    if(!completed){
-      txt+=`Você completou ${pctMeta}% da meta — ${durH.toFixed(1)}h de ${goalH}h. Cada hora de jejum tem valor metabólico real. Próximo passo: identificar o gatilho que interrompeu e ajustar a estratégia (timing da última refeição, hidratação, sono prévio). `;
-    }
-
-    // ── BLOCO 5: Streak e motivação científica ──
-    if(streak>=7){
-      txt+=`${streak} dias consecutivos — sua sensibilidade à insulina já deve estar visivelmente melhorada. Pesquisas confirmam: 7 dias de TRE consistente reduzem os níveis de insulina em jejum em 15-20%.`;
-    } else if(streak>=3){
-      txt+=`Sequência de ${streak} dias — o metabolismo já está se adaptando ao novo ritmo. Continue.`;
-    } else {
-      txt+='Hidrate-se bem ao quebrar o jejum. Prefira proteína + gordura saudável para a primeira refeição — evita o pico de insulina que desperdiça parte dos benefícios conquistados.';
-    }
-
+      var mediaFmt=mediaDur.toFixed(1);
+      if(durH>=mediaDur*1.1){txt+='Excelente progressão: este jejum superou sua média histórica de '+mediaFmt+'h. Os benefícios da autofagia se acumulam com a regularidade semanal. ';}
+      else if(durH<mediaDur*0.8){txt+='Jejum abaixo da sua média habitual de '+mediaFmt+'h. Priorize sono de qualidade e reposição proteica para o próximo ciclo. ';}
+      else{txt+='Desempenho consistente com sua média de '+mediaFmt+'h. Regularidade é mais importante que duração máxima. ';}
+    } else if(total===1){txt+='Primeiro jejum registrado. Os maiores benefícios aparecem com a prática consistente ao longo de semanas. ';}
+    if(!completed){txt+='Você completou '+pctMeta+'% da meta — '+durH.toFixed(1)+'h de '+goalH+'h. Cada hora de jejum tem valor metabólico real. ';}
+    if(streak>=7){txt+=streak+' dias consecutivos — sensibilidade à insulina visivelmente melhorada. 7 dias de TRE consistente reduzem insulina em jejum em 15-20%.';}
+    else if(streak>=3){txt+='Sequência de '+streak+' dias — metabolismo adaptando ao novo ritmo. Continue.';}
+    else{txt+='Hidrate-se bem ao quebrar o jejum. Prefira proteína + gordura saudável na primeira refeição.';}
     body.style.opacity='0';body.style.transition='opacity 0.5s ease';
-    setTimeout(()=>{body.textContent=txt;body.style.opacity='1';},400);
+    setTimeout(function(){body.textContent=txt;body.style.opacity='1';},400);
   },1800);
 }
 
 function calcStreak(jejuns){
   if(!jejuns.length)return 0;
-  let streak=0;
-  const hoje=new Date();hoje.setHours(0,0,0,0);
-  const datas=new Set(jejuns.map(j=>{const d=new Date(j.date||j.end);d.setHours(0,0,0,0);return d.getTime();}));
-  for(let i=0;i<=30;i++){
-    const d=new Date(hoje);d.setDate(d.getDate()-i);
-    if(datas.has(d.getTime()))streak++;else if(i>0)break;
-  }
+  var streak=0;
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  var datas=new Set(jejuns.map(function(j){var d=new Date(j.date||j.end);d.setHours(0,0,0,0);return d.getTime();}));
+  for(var i=0;i<=30;i++){var d=new Date(hoje);d.setDate(d.getDate()-i);if(datas.has(d.getTime()))streak++;else if(i>0)break;}
   return streak;
 }
 
 // ══ HISTÓRICO ════════════════════════════════════════
-function salvarJejum(sessao){try{const s=JSON.parse(localStorage.getItem('jejum_hist_v2')||'[]');s.unshift(sessao);localStorage.setItem('jejum_hist_v2',JSON.stringify(s.slice(0,60)));}catch(e){}}
+function salvarJejum(sessao){try{var s=JSON.parse(localStorage.getItem('jejum_hist_v2')||'[]');s.unshift(sessao);localStorage.setItem('jejum_hist_v2',JSON.stringify(s.slice(0,60)));}catch(e){}}
 function loadJejuns(){try{return JSON.parse(localStorage.getItem('jejum_hist_v2')||'[]');}catch(e){return[];}}
 
+// FIX: concatenação pura
 function renderHistorico(){
-  const lista=document.getElementById('hist-list');if(!lista)return;
-  const jejuns=loadJejuns();
+  var lista=document.getElementById('hist-list');if(!lista)return;
+  var jejuns=loadJejuns();
   if(!jejuns.length){lista.innerHTML='<div class="hist-empty">Nenhum jejum registrado ainda.<br>Complete seu primeiro protocolo!</div>';return;}
-  lista.innerHTML=jejuns.slice(0,7).map((j,i)=>{
-    const d=new Date(j.date||j.end),day=String(d.getDate()).padStart(2,'0'),mon=d.toLocaleDateString('pt-BR',{month:'short'}).toUpperCase();
-    const time=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-    const completed=j.durH>=j.goalH,pct=Math.min(j.durH/j.goalH,1)*100;
-    const durFmt=j.durH>=24?Math.floor(j.durH/24)+'d '+Math.round(j.durH%24)+'h':j.durH.toFixed(1)+'h';
-    return`<div class="hist-item">
-      <div class="hi-date"><div class="hi-d">${day}</div><div class="hi-m">${mon}</div></div>
-      <div class="hi-bar"><div class="hi-strip"><div class="${j.durH>=24?'hi-fill-gold':'hi-fill'}" style="width:${pct}%"></div></div><div class="hi-meta">${time} · Meta: ${j.goalH}h · ${completed?'✅':'⏸️'} ${Math.round(pct)}%</div></div>
-      <div class="hi-right"><div class="hi-dur">${durFmt}</div><div class="hi-ok">${completed?'Completo':'Parcial'}</div><button class="del-btn" onclick="deletarJejum(${i})">DEL</button></div>
-    </div>`;
-  }).join('');
+  var html='';
+  jejuns.slice(0,7).forEach(function(j,i){
+    var d=new Date(j.date||j.end);
+    var day=String(d.getDate()).padStart(2,'0');
+    var mon=d.toLocaleDateString('pt-BR',{month:'short'}).toUpperCase();
+    var time=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    var completed=j.durH>=j.goalH;
+    var pct=Math.min(j.durH/j.goalH,1)*100;
+    var durFmt=j.durH>=24?Math.floor(j.durH/24)+'d '+Math.round(j.durH%24)+'h':j.durH.toFixed(1)+'h';
+    var fillClass=j.durH>=24?'hi-fill-gold':'hi-fill';
+    html+='<div class="hist-item">';
+    html+='<div class="hi-date"><div class="hi-d">'+day+'</div><div class="hi-m">'+mon+'</div></div>';
+    html+='<div class="hi-bar"><div class="hi-strip"><div class="'+fillClass+'" style="width:'+pct+'%"></div></div>';
+    html+='<div class="hi-meta">'+time+' · Meta: '+j.goalH+'h · '+(completed?'✅':'⏸️')+' '+Math.round(pct)+'%</div></div>';
+    html+='<div class="hi-right"><div class="hi-dur">'+durFmt+'</div>';
+    html+='<div class="hi-ok">'+(completed?'Completo':'Parcial')+'</div>';
+    html+='<button class="del-btn" onclick="deletarJejum('+i+')">DEL</button></div>';
+    html+='</div>';
+  });
+  lista.innerHTML=html;
 }
 
 function deletarJejum(i){
   if(!confirm('Apagar este registro permanentemente?'))return;
-  const s=loadJejuns();s.splice(i,1);localStorage.setItem('jejum_hist_v2',JSON.stringify(s));
+  var s=loadJejuns();s.splice(i,1);localStorage.setItem('jejum_hist_v2',JSON.stringify(s));
   renderHistorico();renderCalendar();renderStats();renderHomeStats();
 }
 
 function renderStats(){
-  const j=loadJejuns();
-  const total=document.getElementById('hs-total');if(total)total.textContent=j.length;
-  const now=new Date();
-  const mes=document.getElementById('hs-mes');
-  if(mes)mes.textContent=j.filter(x=>{const d=new Date(x.date||x.end);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).length;
-  const bestH=j.length?Math.max(...j.map(x=>x.durH)):0;
-  const best=document.getElementById('hs-best');if(best)best.textContent=bestH>=24?Math.floor(bestH/24)+'d '+Math.round(bestH%24)+'h':bestH.toFixed(1)+'h';
-  const avgH=j.length?j.reduce((a,x)=>a+x.durH,0)/j.length:0;
-  const avg=document.getElementById('hs-avg');if(avg)avg.textContent=avgH.toFixed(1)+'h';
+  var j=loadJejuns();
+  var total=document.getElementById('hs-total');if(total)total.textContent=j.length;
+  var now=new Date();
+  var mes=document.getElementById('hs-mes');
+  if(mes)mes.textContent=j.filter(function(x){var d=new Date(x.date||x.end);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).length;
+  var bestH=j.length?Math.max.apply(null,j.map(function(x){return x.durH;})):0;
+  var best=document.getElementById('hs-best');if(best)best.textContent=bestH>=24?Math.floor(bestH/24)+'d '+Math.round(bestH%24)+'h':bestH.toFixed(1)+'h';
+  var avgH=j.length?j.reduce(function(a,x){return a+x.durH;},0)/j.length:0;
+  var avg=document.getElementById('hs-avg');if(avg)avg.textContent=avgH.toFixed(1)+'h';
 }
 
+// FIX: concatenação pura no mini hist
 function renderHomeStats(){
-  const j=loadJejuns();
-  const now=new Date();
-  const doMes=j.filter(x=>{const d=new Date(x.date||x.end);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
-  const hmTotal=document.getElementById('hm-total');if(hmTotal)hmTotal.textContent=j.length;
-  const hmMes=document.getElementById('hm-mes');if(hmMes)hmMes.textContent=doMes.length;
-  const bestH=j.length?Math.max(...j.map(x=>x.durH)):0;
-  const hmBest=document.getElementById('hm-best');if(hmBest)hmBest.textContent=bestH>0?(bestH>=24?Math.floor(bestH/24)+'d':bestH.toFixed(1)+'h'):'--';
-  const avgH=doMes.length?doMes.reduce((a,x)=>a+x.durH,0)/doMes.length:0;
-  const hmAvg=document.getElementById('hm-avg');if(hmAvg)hmAvg.textContent=avgH>0?avgH.toFixed(1)+'h':'--';
-  const mini=document.getElementById('mini-hist');if(!mini)return;
+  var j=loadJejuns();
+  var now=new Date();
+  var doMes=j.filter(function(x){var d=new Date(x.date||x.end);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  var hmTotal=document.getElementById('hm-total');if(hmTotal)hmTotal.textContent=j.length;
+  var hmMes=document.getElementById('hm-mes');if(hmMes)hmMes.textContent=doMes.length;
+  var bestH=j.length?Math.max.apply(null,j.map(function(x){return x.durH;})):0;
+  var hmBest=document.getElementById('hm-best');if(hmBest)hmBest.textContent=bestH>0?(bestH>=24?Math.floor(bestH/24)+'d':bestH.toFixed(1)+'h'):'--';
+  var avgH=doMes.length?doMes.reduce(function(a,x){return a+x.durH;},0)/doMes.length:0;
+  var hmAvg=document.getElementById('hm-avg');if(hmAvg)hmAvg.textContent=avgH>0?avgH.toFixed(1)+'h':'--';
+  var mini=document.getElementById('mini-hist');if(!mini)return;
   if(!j.length){mini.innerHTML='<div style="font-family:\'Roboto Mono\',monospace;font-size:0.62rem;color:var(--t3);text-align:center;padding:4px 0;">Nenhum jejum ainda</div>';return;}
-  mini.innerHTML=j.slice(0,3).map(jj=>{
-    const d=new Date(jj.date||jj.end);
-    const completed=jj.durH>=jj.goalH;
-    const pct=Math.min(jj.durH/jj.goalH,1)*100;
-    const durFmt=jj.durH>=24?Math.floor(jj.durH/24)+'d '+Math.round(jj.durH%24)+'h':jj.durH.toFixed(1)+'h';
-    const cor=jj.durH>=24?'var(--gold)':completed?'var(--grn)':'var(--org)';
-    return`<div class="mh-item">
-      <div class="mh-dot" style="background:${cor}"></div>
-      <div class="mh-info">
-        <div class="mh-dur">${durFmt} <span style="font-family:'Roboto Mono',monospace;font-size:0.55rem;color:var(--t3);">· meta ${jj.goalH}h</span></div>
-        <div class="mh-meta">${d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})} · ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}</div>
-      </div>
-      <div class="mh-pct" style="color:${cor}">${Math.round(pct)}%</div>
-    </div>`;
-  }).join('');
+  var html='';
+  j.slice(0,3).forEach(function(jj){
+    var d=new Date(jj.date||jj.end);
+    var completed=jj.durH>=jj.goalH;
+    var pct=Math.min(jj.durH/jj.goalH,1)*100;
+    var durFmt=jj.durH>=24?Math.floor(jj.durH/24)+'d '+Math.round(jj.durH%24)+'h':jj.durH.toFixed(1)+'h';
+    var cor=jj.durH>=24?'var(--gold)':completed?'var(--grn)':'var(--org)';
+    html+='<div class="mh-item">';
+    html+='<div class="mh-dot" style="background:'+cor+'"></div>';
+    html+='<div class="mh-info">';
+    html+='<div class="mh-dur">'+durFmt+' <span style="font-family:\'Roboto Mono\',monospace;font-size:0.55rem;color:var(--t3);">· meta '+jj.goalH+'h</span></div>';
+    html+='<div class="mh-meta">'+d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})+' · '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+'</div>';
+    html+='</div>';
+    html+='<div class="mh-pct" style="color:'+cor+'">'+Math.round(pct)+'%</div>';
+    html+='</div>';
+  });
+  mini.innerHTML=html;
 }
 
 function renderCalendar(){
-  const grid=document.getElementById('cal-grid'),monEl=document.getElementById('cal-mon');if(!grid)return;
+  var grid=document.getElementById('cal-grid'),monEl=document.getElementById('cal-mon');if(!grid)return;
   grid.innerHTML='<div class="cal-dl">S</div><div class="cal-dl">T</div><div class="cal-dl">Q</div><div class="cal-dl">Q</div><div class="cal-dl">S</div><div class="cal-dl">S</div><div class="cal-dl">D</div>';
-  const jejuns=loadJejuns(),jmap={};
-  jejuns.forEach(j=>{const d=new Date(j.date||j.end),k=`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;if(!jmap[k]||j.durH>jmap[k].durH)jmap[k]=j;});
-  const now=new Date();if(monEl)monEl.textContent=now.toLocaleDateString('pt-BR',{month:'long'}).toUpperCase();
-  const days=[];for(let i=27;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);days.push(d);}
-  const pad=(days[0].getDay()+6)%7;
-  for(let i=0;i<pad;i++){const e=document.createElement('div');e.style.aspectRatio='1';grid.appendChild(e);}
-  days.forEach(d=>{
-    const k=`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`,nk=`${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`,j=jmap[k];
-    const dot=document.createElement('div');dot.className='cal-dot'+(d>now&&k!==nk?' future':'')+(k===nk?' today':'');
-    if(j){if(j.durH>=48)dot.classList.add('d48');else if(j.durH>=24)dot.classList.add('d24');else if(j.durH>=16)dot.classList.add('d16');else dot.classList.add('d12');dot.title=d.getDate()+'/'+(d.getMonth()+1)+' · '+j.durH.toFixed(1)+'h';}
-    const n=document.createElement('div');n.className='cal-dn';n.textContent=d.getDate();dot.appendChild(n);grid.appendChild(dot);
+  var jejuns=loadJejuns(),jmap={};
+  jejuns.forEach(function(j){var d=new Date(j.date||j.end),k=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate();if(!jmap[k]||j.durH>jmap[k].durH)jmap[k]=j;});
+  var now=new Date();if(monEl)monEl.textContent=now.toLocaleDateString('pt-BR',{month:'long'}).toUpperCase();
+  var days=[];for(var i=27;i>=0;i--){var d=new Date(now);d.setDate(d.getDate()-i);days.push(d);}
+  var pad=(days[0].getDay()+6)%7;
+  for(var i=0;i<pad;i++){var e=document.createElement('div');e.style.aspectRatio='1';grid.appendChild(e);}
+  days.forEach(function(d){
+    var k=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate();
+    var nk=now.getFullYear()+'-'+now.getMonth()+'-'+now.getDate();
+    var j=jmap[k];
+    var dot=document.createElement('div');
+    dot.className='cal-dot'+(d>now&&k!==nk?' future':'')+(k===nk?' today':'');
+    if(j){if(j.durH>=48)dot.classList.add('d48');else if(j.durH>=24)dot.classList.add('d24');else if(j.durH>=16)dot.classList.add('d16');else dot.classList.add('d12');}
+    var n=document.createElement('div');n.className='cal-dn';n.textContent=d.getDate();dot.appendChild(n);grid.appendChild(dot);
   });
 }
 
-document.getElementById('btn-novo').addEventListener('click',()=>{
+document.getElementById('btn-novo').addEventListener('click',function(){
   document.getElementById('retro-time').value='';document.getElementById('retro-preview').textContent='';showScreen('sc-home');
 });
-document.querySelectorAll('.pre-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{document.querySelectorAll('.pre-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('dur-input').value=btn.dataset.h;});
+document.querySelectorAll('.pre-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.pre-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');document.getElementById('dur-input').value=btn.dataset.h;
+  });
 });
-document.getElementById('dur-input').addEventListener('input',()=>{
-  const v=parseInt(document.getElementById('dur-input').value);
-  document.querySelectorAll('.pre-btn').forEach(b=>{b.classList.toggle('active',parseInt(b.dataset.h)===v);});
+document.getElementById('dur-input').addEventListener('input',function(){
+  var v=parseInt(this.value);
+  document.querySelectorAll('.pre-btn').forEach(function(b){b.classList.toggle('active',parseInt(b.dataset.h)===v);});
 });
-function updateDate(){const el=document.getElementById('hdr-date');if(el)el.textContent=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'}).toUpperCase();}
-const appEl=document.getElementById('main-app');
-const goFull=()=>{if(!document.fullscreenElement)appEl.requestFullscreen().catch(()=>{});document.removeEventListener('click',goFull);document.removeEventListener('touchstart',goFull);};
-document.addEventListener('click',goFull);document.addEventListener('touchstart',goFull);
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-let dPrm=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dPrm=e;document.getElementById('ib').classList.add('show');});
-document.getElementById('ib-y').addEventListener('click',async()=>{document.getElementById('ib').classList.remove('show');if(dPrm){dPrm.prompt();await dPrm.userChoice;dPrm=null;}});
-document.getElementById('ib-n').addEventListener('click',()=>document.getElementById('ib').classList.remove('show'));
-window.addEventListener('appinstalled',()=>document.getElementById('ib').classList.remove('show'));
-window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('splash').classList.add('hide');setTimeout(()=>{const s=document.getElementById('splash');if(s)s.remove();},1000);},2200);});
+function updateDate(){var el=document.getElementById('hdr-date');if(el)el.textContent=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'}).toUpperCase();}
+
+// FIX: SW só registra em domínio válido
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    var host=window.location.hostname;
+    if(host==='localhost'||host.indexOf('github.io')>=0||host.indexOf('127.0.0.1')>=0){
+      navigator.serviceWorker.register('./sw.js').catch(function(){});
+    }
+  });
+}
+
+var dPrm=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dPrm=e;document.getElementById('ib').classList.add('show');});
+document.getElementById('ib-y').addEventListener('click',async function(){document.getElementById('ib').classList.remove('show');if(dPrm){dPrm.prompt();await dPrm.userChoice;dPrm=null;}});
+document.getElementById('ib-n').addEventListener('click',function(){document.getElementById('ib').classList.remove('show');});
+window.addEventListener('appinstalled',function(){document.getElementById('ib').classList.remove('show');});
+window.addEventListener('load',function(){
+  setTimeout(function(){
+    var s=document.getElementById('splash');
+    if(s){s.classList.add('hide');setTimeout(function(){if(s)s.remove();},1000);}
+  },2200);
+});
+
 updateDate();setInterval(updateDate,60000);
-initDNA();initRing();
-if(loadState()){showScreen('sc-ativo');if(ST.timerId)clearInterval(ST.timerId);ST.timerId=setInterval(tick,1000);tick();}
-else{showScreen('sc-home');}
+initDNA();
+
+// FIX: initRing APÓS showScreen para canvas estar visível
+if(loadState()){
+  showScreen('sc-ativo');
+  initRing();
+  if(ST.timerId)clearInterval(ST.timerId);
+  ST.timerId=setInterval(tick,1000);tick();
+} else {
+  showScreen('sc-home');
+}
 renderHomeStats();
 </script>
 </body>
